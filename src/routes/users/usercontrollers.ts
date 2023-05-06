@@ -1,6 +1,8 @@
 import * as admin from "firebase-admin";
 import { Request, Response } from 'express';
+import { User } from "../../models/User";
 
+const instanceUser = new User(null, null, null, null)
 const createUser = async (req: Request, res: Response) => {
     const { email, password } = await req.body;
 
@@ -56,4 +58,29 @@ const getUserById = async (req: Request, res: Response) => {
 
 }
 
-export default { createUser, getUserById };
+const retrieveAllUsers = async (req: Request, res: Response) => {
+    const token = req.headers['authorization'].split(' ')[1];
+
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        let users: any[] = []
+        await admin.auth().listUsers()
+            .then(async (userRecords: any) => {
+                userRecords.users.map((userInfo) => {
+                    let user = {
+                        displayName: userInfo.displayName,
+                        uid: userInfo.uid
+                    }
+                    users.push(user)
+                })
+                return await res.status(200).send(users)
+
+            })
+            .catch((error) => {
+                console.log('Error fetching user data:', error);
+            });
+    }).catch((err) => {
+        return res.status(401).send(err.message);
+    })
+
+}
+export default { createUser, getUserById, retrieveAllUsers };

@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 import { WordPair } from '../../../models/WordPair';
+import { from, of } from 'rxjs';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
 const pirInstance = new Pir(null, null, null, null, null)
@@ -169,4 +170,34 @@ const deletePir = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir }
+const retrieveAllWordPairsOfSinglePir = async (req: Request, res: Response) => {
+    const pirId = req.query.pirId;
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        const nodeRef = admin.database().ref('pir/' + pirId + '/chapters');
+        // Read the data at the node once
+        await nodeRef.once('value', async (snapshot) => {
+            if (snapshot.exists()) {
+                const chapters = snapshot.val();
+                let wordpairs: any[] = []
+                await Object.values(chapters).map((data: any) => {
+                    if (data.wordPairs) {
+                        Object.values(data.wordPairs).map((wp: WordPair) => {
+                            wordpairs.push(wp)
+                        })
+                    }
+                })
+                await res.send(wordpairs)
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir }

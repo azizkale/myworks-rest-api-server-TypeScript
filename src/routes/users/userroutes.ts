@@ -9,5 +9,6 @@ router.use(bodyParser.json());
 router.post('/signin', signin.signin);
 router.post('/users/createuser', usercontroller.createUser);
 router.get('/users/getUserById', usercontroller.getUserById);
+router.get('/users/retrieveallusers', usercontroller.retrieveAllUsers)
 
 export default router
