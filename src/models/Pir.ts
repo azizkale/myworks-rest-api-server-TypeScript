@@ -131,4 +131,9 @@ export class Pir {
         const ref = await admin.database().ref('pir/');
         return await ref.child(pirId).remove();
     }
+
+    async deleteChapter(pirId: any, chapterId: any) {
+        const ref = await admin.database().ref(`pir/${pirId}/chapters/`);
+        return await ref.child(chapterId).remove();
+    }
 };
