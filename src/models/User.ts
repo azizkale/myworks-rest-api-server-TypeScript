@@ -35,4 +35,14 @@ export class User {
         //         console.log('Error fetching user data:', error);
         //     });
     }
+
+    retrieveEditorByEditorId = async (editorId: any) => {
+        return await admin.auth().getUser(editorId)
+            .then(async (userRecords: any) => {
+                return {
+                    displayName: userRecords.displayName,
+                    uid: userRecords.uid
+                }
+            })
+    }
 };

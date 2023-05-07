@@ -83,4 +83,17 @@ const retrieveAllUsers = async (req: Request, res: Response) => {
     })
 
 }
-export default { createUser, getUserById, retrieveAllUsers };
+
+const retrieveEditorbyEditorId = async (req: Request, res: Response) => {
+    const token = req.headers['authorization'].split(' ')[1];
+    const editorid: any = req.query.editorid
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
+            res.status(200).send(user)
+        })
+
+    }).catch((err) => {
+        return res.status(401).send(err.message);
+    })
+}
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId };

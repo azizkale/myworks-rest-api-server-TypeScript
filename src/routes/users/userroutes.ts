@@ -10,5 +10,5 @@ router.post('/signin', signin.signin);
 router.post('/users/createuser', usercontroller.createUser);
 router.get('/users/getUserById', usercontroller.getUserById);
 router.get('/users/retrieveallusers', usercontroller.retrieveAllUsers)
-
+router.get('/users/retrieveeditorbyid', usercontroller.retrieveEditorbyEditorId)
 export default router
