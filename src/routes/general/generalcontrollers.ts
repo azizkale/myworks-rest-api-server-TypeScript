@@ -13,4 +13,6 @@ const controlTokenExpired = async (req: Request, res: Response) => {
         return res.status(401).send(err.message);
     })
 }
+
+
 export default { controlTokenExpired };
