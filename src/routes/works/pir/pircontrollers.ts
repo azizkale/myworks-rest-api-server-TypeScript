@@ -217,4 +217,20 @@ const deleteChapter = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter }
+const deleteWordPair = async (req: Request, res: Response) => {
+    const wordPair = req.body.wordPair;
+    console.log(wordPair)
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        wordPairInstance.deleteWordPair(wordPair).then((ress) => {
+            return res.status(200).send(
+                { info: wordPair.word + ' deleted' }
+            );
+        })
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair }

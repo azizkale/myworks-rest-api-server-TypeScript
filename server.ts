@@ -91,7 +91,7 @@ app.get("/adduser", (req, res) => {
 });
 
 app.get("/addrole", (req, res) => {
-  addRole("azizkale@hotmail.com", 'mentor');
+  addRole("azizkale@hotmail.com", 'editor_pir');
 });
 
 app.listen(port, () => {
