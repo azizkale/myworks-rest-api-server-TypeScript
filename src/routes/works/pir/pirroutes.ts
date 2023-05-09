@@ -14,6 +14,7 @@ router.delete('/pir/deletepir', tokenControl, pircontrollers.deletePir)
 
 router.post('/pir/addchapter', tokenControl, pircontrollers.createChapter);
 router.get('/pir/getchaptersbyeditorid', tokenControl, pircontrollers.retrieveChaptersByEditorId)
+router.get('/pir/getallchapters', tokenControl, pircontrollers.retrieveAllChapters)
 router.patch('/pir/updatechapter', tokenControl, pircontrollers.updateChapter)
 router.delete('/pir/deletechapter', tokenControl, pircontrollers.deleteChapter)
 

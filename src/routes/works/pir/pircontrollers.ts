@@ -103,6 +103,17 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
     })
 }
 
+const retrieveAllChapters = async (req: Request, res: Response) => {
+    const pirId: any = req.query.pirId;
+    pirInstance.retrievePirs().then((pirs) => {
+        const selectedPir: Pir | any = (Object.values(pirs.val()).filter((pir: Pir) => pir.pirId === pirId))[0]
+        return res.status(200).send(selectedPir.chapters)
+
+    }).catch((error) => {
+        return res.status(401).send(error.message);
+    })
+}
+
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     const token = req.headers['authorization'].split(' ')[1];
@@ -233,4 +244,4 @@ const deleteWordPair = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair }
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters }
