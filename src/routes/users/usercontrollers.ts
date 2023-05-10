@@ -100,19 +100,12 @@ const retrieveEditorbyEditorId = async (req: Request, res: Response) => {
 const addRoleToUser = async (req: Request, res: Response) => {
     const uid: string | any = req.body.uid;
     const role = req.body.role;
-    await admin.auth().getUser(uid).then(async (userRecord) => {
-        if (userRecord.customClaims.roles.includes(role)) {
-            console.log('this user is already a ' + role)
-            res.status(401).send({ response: 'this user is already a ' + role })
-        }
-        else {
-            // adds role to users
-            const uid = userRecord.uid;
-            const arr = userRecord.customClaims.roles;
-            await arr.push(role);
-            await admin.auth().setCustomUserClaims(uid, { roles: arr })
-            await res.status(200).send({ response: arr })
-        }
-    });
+
+    instanceUser.addRoleToUser(uid, role).then((result: any) => {
+        res.status(200).send(result)
+    }).catch((error: any) => {
+        res.status(401).send(error)
+    })
+
 }
 export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser };

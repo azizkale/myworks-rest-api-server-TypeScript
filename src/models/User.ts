@@ -15,10 +15,6 @@ export class User {
         this.role = role
     }
 
-    creasteUser = async (email: string, password: any) => {
-
-    }
-
     retrieveAllUsers = async () => {
         // let users: any[] = []
         // return await admin.auth().listUsers()
@@ -44,5 +40,22 @@ export class User {
                     uid: userRecords.uid
                 }
             })
+    }
+
+    addRoleToUser = async (userId: any, role: string) => {
+        await admin.auth().getUser(userId).then(async (userRecord) => {
+            if (userRecord.customClaims.roles.includes(role)) {
+                console.log('this user is already a ' + role)
+                return { response: 'this user is already a ' + role }
+            }
+            else {
+                // adds role to users
+                const uid = userRecord.uid;
+                const arr = userRecord.customClaims.roles;
+                await arr.push(role);
+                await admin.auth().setCustomUserClaims(uid, { roles: arr })
+                return { response: arr }
+            }
+        });
     }
 };
