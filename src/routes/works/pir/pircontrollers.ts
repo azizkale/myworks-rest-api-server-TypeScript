@@ -3,7 +3,6 @@ import * as admin from "firebase-admin";
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 import { WordPair } from '../../../models/WordPair';
-import { from, of } from 'rxjs';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
 const pirInstance = new Pir(null, null, null, null, null)
