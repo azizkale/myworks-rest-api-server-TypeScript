@@ -1,3 +1,4 @@
+import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 const db = getDatabase();
@@ -18,6 +19,24 @@ export class Group {
             groupName: groupName,
             mentorId: mentorId,
             users: []
+        });
+    }
+
+    async retrieveGroups() {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('groups');
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                return data
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
         });
     }
 }
