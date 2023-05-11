@@ -14,10 +14,12 @@ export class Group {
             this.mentorId = mentorId
     }
 
-    async createGroup(groupName: any, mentorId: any, groupId: any) {
+    async createGroup(groupName: any, mentorId: any, groupId: any, mentorEmail: any) {
         await set(ref(db, 'groups/' + groupId), {
             groupName: groupName,
             mentorId: mentorId,
+            mentorEmail: mentorEmail,
+            groupId: groupId,
             users: []
         });
     }

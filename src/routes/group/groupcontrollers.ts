@@ -8,17 +8,19 @@ const instanceGroup = new Group(null, null)
 
 const createGroup = async (req: Request, res: Response) => {
     const { groupName, mentorEmail } = req.body;
-    let mentorId;
-    admin.auth().getUserByEmail(mentorEmail)
-        .then((mentor) => {
-            mentorId = mentor.uid
+    //control wether user exists
+    await admin.auth().getUserByEmail(mentorEmail)
+        .then(async (mentor) => {
+            const groupId = await uuidv1();
+            await instanceGroup.createGroup(groupName, mentor.uid, groupId, mentorEmail).then((result: any) => {
+                res.status(200).send(result)
+            }).catch((error) => {
+                res.status(401).send(error)
+            })
+        }).catch((error) => {
+            res.status(404).send(error.message)
         })
-    const groupId = await uuidv1();
-    await instanceGroup.createGroup(groupName, mentorId, groupId).then((result: any) => {
-        res.status(200).send(result)
-    }).catch((error) => {
-        res.status(401).send(error)
-    })
+
 }
 
 const retrieveGroups = async (req: Request, res: Response) => {
