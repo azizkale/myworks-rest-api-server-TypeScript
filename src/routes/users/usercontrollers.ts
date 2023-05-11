@@ -13,7 +13,6 @@ const createUser = async (req: Request, res: Response) => {
                 response: 'user already exists'
             });
         }
-
     }).catch(async (error) => {
         // if user does not exist than new user is created========
         await admin.auth().createUser({
@@ -108,4 +107,14 @@ const addRoleToUser = async (req: Request, res: Response) => {
     })
 
 }
-export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser };
+
+const retrieveUserByEmail = async (req: Request, res: Response) => {
+    const email: string | any = req.query.email
+    instanceUser.retrieveUserByEmail(email).then((user) => {
+        console.log(user)
+        res.status(200).send(user)
+    }).catch((error) => {
+        res.status(404).send(error)
+    })
+}
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail };

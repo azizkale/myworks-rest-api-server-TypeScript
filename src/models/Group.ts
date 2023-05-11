@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
+import { Roles } from "./Roles";
 const db = getDatabase();
 
 export class Group {
@@ -14,6 +15,8 @@ export class Group {
             this.mentorId = mentorId
     }
 
+    //for admin=====================
+    //groups are created default with their mentors
     async createGroup(groupName: any, mentorId: any, groupId: any, mentorEmail: any) {
         await set(ref(db, 'groups/' + groupId), {
             groupName: groupName,
@@ -22,6 +25,14 @@ export class Group {
             groupId: groupId,
             users: []
         });
+        //to find that how mony group user has. as mentor or another roles
+        await set(
+            ref(db, 'users/' + mentorId + '/groups/' + groupId), {
+            groupId: groupId,
+            role: Roles[2]
+        });
+
+
     }
 
     async retrieveGroups() {
@@ -40,5 +51,10 @@ export class Group {
         }, (error) => {
             return { error: error }
         });
+    }
+
+    async deleteGroup(groupId: any) {
+        const ref = await admin.database().ref('groups/');
+        return await ref.child(groupId).remove();
     }
 }

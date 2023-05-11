@@ -32,5 +32,12 @@ const retrieveGroups = async (req: Request, res: Response) => {
 
 }
 
+const deleteGroup = async (req: Request, res: Response) => {
+    const groupId = req.body.groupId;
+    instanceGroup.deleteGroup(groupId).then((result) => {
+        res.status(200).send(result)
+    })
+}
 
-export default { createGroup, retrieveGroups };
+
+export default { createGroup, retrieveGroups, deleteGroup };

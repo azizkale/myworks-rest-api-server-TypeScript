@@ -58,4 +58,8 @@ export class User {
             }
         });
     }
+
+    retrieveUserByEmail = async (email: any) => {
+        return admin.auth().getUserByEmail(email)
+    }
 };
