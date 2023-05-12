@@ -110,11 +110,21 @@ const addRoleToUser = async (req: Request, res: Response) => {
 
 const retrieveUserByEmail = async (req: Request, res: Response) => {
     const email: string | any = req.query.email
-    instanceUser.retrieveUserByEmail(email).then((user) => {
-        console.log(user)
-        res.status(200).send(user)
+    instanceUser.retrieveUserByEmail(email).then((result) => {
+        res.send(result)
     }).catch((error) => {
-        res.status(404).send(error)
+        res.status(401).send({ error: 'error' })
     })
 }
-export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail };
+
+const addPArticipantToGroup = async (req: Request, res: Response) => {
+    const groupId = req.body.groupId;
+    const email = req.body.email;
+    const role = req.body.role
+
+    instanceUser.addParticipantToGroup(groupId, email, role).then((result) => {
+        res.status(200).send(result)
+    })
+}
+
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup };

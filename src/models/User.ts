@@ -1,3 +1,4 @@
+import { getDatabase, ref, set } from "firebase/database";
 import { Book } from "./Book";
 import * as admin from "firebase-admin";
 
@@ -60,6 +61,50 @@ export class User {
     }
 
     retrieveUserByEmail = async (email: any) => {
-        return admin.auth().getUserByEmail(email)
+        try {
+            const userRecord = admin.auth().getUserByEmail(email);
+            return userRecord;
+        } catch (error) {
+            if (error.code === 'auth/user-not-found') {
+                return {
+                    error: 'User not found'
+                };
+            } else {
+                return {
+                    error: 'Error fetching user info'
+                };
+            }
+        }
+
+    }
+
+    addParticipantToGroup = async (groupId: any, email: any, role: string) => {
+        const db = getDatabase();
+
+        admin.auth().getUserByEmail(email).then((user) => {
+            set(ref(db, 'groups/' + groupId + '/users'),
+                [{
+                    userId: user.uid,
+                    role: role
+                }]
+            );
+        })
+        // retrieve groups
+        const nodeRef = admin.database().ref(`groups/${groupId}/users`);
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                if (data)
+                    return data
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+
     }
 };

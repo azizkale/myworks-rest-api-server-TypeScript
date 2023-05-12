@@ -2,6 +2,7 @@ import express from 'express';
 import usercontroller from './usercontrollers';
 import signin from '../../functions/sigin';
 import bodyParser from 'body-parser';
+import tokenControl from '../../functions/checkTokenExpiration';
 
 const router = express.Router();
 
@@ -13,4 +14,5 @@ router.get('/users/retrieveallusers', usercontroller.retrieveAllUsers)
 router.get('/users/retrieveeditorbyid', usercontroller.retrieveEditorbyEditorId)
 router.get('/users/retrieuserbyemail', usercontroller.retrieveUserByEmail)
 router.patch('/users/addroletouser', usercontroller.addRoleToUser)
+router.patch('/users/addparticipant', tokenControl, usercontroller.addPArticipantToGroup)
 export default router

@@ -45,8 +45,6 @@ export class Pir {
             createDate: chapter.createDate,
             chapterId: chapter.chapterId
         });
-
-        // await set(ref(db, 'users/' + pir.editorId + '/works/pirs/' + pir.pirId), { pir: pir.pirId });
     }
 
     async retrievePirs() {
