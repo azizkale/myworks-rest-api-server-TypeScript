@@ -53,6 +53,19 @@ export class Group {
         });
     }
 
+    async updateGroup(group: Group) {
+        const db = admin.database();
+        const ref = db.ref('groups/' + group.groupId);
+        return ref.update(group)
+            .then(() => {
+                return { group }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
+    }
+
     async deleteGroup(groupId: any) {
         const ref = await admin.database().ref('groups/');
         return await ref.child(groupId).remove();

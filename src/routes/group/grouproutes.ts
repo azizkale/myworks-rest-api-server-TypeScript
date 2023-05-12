@@ -8,6 +8,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 router.post('/group/creategroup', [tokenControl], groupcontrollers.createGroup);
 router.get('/group/retrievegroups', [tokenControl], groupcontrollers.retrieveGroups)
+router.patch('/group/updategroup', [tokenControl], groupcontrollers.updateGroup)
 router.delete('/group/deletegroup', [tokenControl], groupcontrollers.deleteGroup)
 
 export default router;
