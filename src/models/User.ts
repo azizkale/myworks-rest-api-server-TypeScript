@@ -78,33 +78,59 @@ export class User {
 
     }
 
-    addParticipantToGroup = async (groupId: any, email: any, role: string) => {
+    addParticipantToGroup = async (groupId: any, uid: any, role: string) => {
         const db = getDatabase();
 
-        admin.auth().getUserByEmail(email).then((user) => {
-            set(ref(db, 'groups/' + groupId + '/users'),
-                [{
-                    userId: user.uid,
-                    role: role
-                }]
-            );
-        })
-        // retrieve groups
-        const nodeRef = admin.database().ref(`groups/${groupId}/users`);
-        // Read the data at the node once
-        return nodeRef.once('value', (snapshot) => {
-            if (snapshot.exists()) {
-                // access the data from the snapshot if it exists
-                const data = snapshot.val();
-                if (data)
-                    return data
+        const newParticipant = {
+            uid: uid,
+            role: role
+        }
+        // retrieve group
+        return admin.database().ref(`participants/${groupId}/users`)
+            .once('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    //if there is an user-array already
+                    const arrParticipants = await snapshot.val();
 
-            } else {
-                return null
-            }
-        }, (error) => {
-            return { error: error }
-        });
+                    //controlling if the array has the users already
+                    const elementIndex = arrParticipants.findIndex(element => JSON.stringify(element) === JSON.stringify(newParticipant));
+                    if (elementIndex !== -1) {
+                        return (`${newParticipant} exists in the array at index ${elementIndex}!`);
+                    } else {
+                        await arrParticipants.push(newParticipant)
+                        //adding participant to group
+                        await set(ref(db, 'participants/' + groupId + '/users'),
+                            arrParticipants
+                        );
+                        //adding group to user
+                        this.addGroupToUser(uid, groupId, role)
+
+                        return await arrParticipants
+                    }
+
+                } else {
+                    //if no user-array yet 
+                    await set(ref(db, 'participants/' + groupId + '/users'),
+                        [newParticipant]);
+                    //adding group to user
+                    this.addGroupToUser(uid, groupId, role)
+                }
+            }, (error) => {
+                return { error: error }
+            });
 
     }
-};
+
+    addGroupToUser = async (participantid: any, groupId: any, role: string) => {
+        const db = getDatabase();
+
+        await set(
+            ref(db, 'users/' + participantid + '/participants/' + groupId), {
+            groupId: groupId,
+            role: role
+        });
+
+
+
+    }
+}

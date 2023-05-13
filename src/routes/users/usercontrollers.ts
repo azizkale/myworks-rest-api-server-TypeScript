@@ -119,10 +119,10 @@ const retrieveUserByEmail = async (req: Request, res: Response) => {
 
 const addPArticipantToGroup = async (req: Request, res: Response) => {
     const groupId = req.body.groupId;
-    const email = req.body.email;
+    const uid = req.body.uid;
     const role = req.body.role
-
-    instanceUser.addParticipantToGroup(groupId, email, role).then((result) => {
+    console.log(req.body)
+    instanceUser.addParticipantToGroup(groupId, uid, role).then((result) => {
         res.status(200).send(result)
     })
 }
