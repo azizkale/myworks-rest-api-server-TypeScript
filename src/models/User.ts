@@ -1,7 +1,7 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Book } from "./Book";
 import * as admin from "firebase-admin";
-import { addGroupToUser } from "./addGroupToUser";
+import { addGroupToUser } from "../functions/addGroupToUser";
 
 export class User {
     userName: string;
@@ -82,39 +82,35 @@ export class User {
     addParticipantToGroup = async (groupId: any, uid: any, role: string) => {
         const db = getDatabase();
         const newParticipant = {
+            role: role,
             uid: uid,
-            role: role
         }
         // retrieve group
-        return admin.database().ref(`participants/${groupId}/users`)
+        return admin.database().ref(`groups/${groupId}/users/`)
             .once('value', async (snapshot) => {
-                if (snapshot.exists()) {
-                    //if there is an user-array already
-                    const arrParticipants = await snapshot.val();
 
-                    //controlling if the array has the users already
-                    const elementIndex = arrParticipants.findIndex(element => JSON.stringify(element) === JSON.stringify(newParticipant));
-                    if (elementIndex !== -1) {
-                        return (`${newParticipant} exists in the array at index ${elementIndex}!`);
-                    } else {
-                        await arrParticipants.push(newParticipant)
-                        //adding participant to group
-                        await set(ref(db, 'participants/' + groupId + '/users'),
-                            arrParticipants
-                        );
-                        //adding group to user
-                        addGroupToUser(uid, groupId, role)
+                //if there is an user-array already
+                const arrParticipants = await snapshot.val();
 
-                        return await arrParticipants
-                    }
+                //controlling if the array has the users already
+                const isIncluded = arrParticipants.some((obj) => {
+                    return obj.uid === newParticipant.uid && obj.role === newParticipant.role;
+                });
 
+                if (isIncluded) {
+                    return (`${newParticipant} exists in the array `);
                 } else {
-                    //if no user-array yet 
-                    await set(ref(db, 'participants/' + groupId + '/users'),
-                        [newParticipant]);
+                    await arrParticipants.push(newParticipant)
+                    //adding participant to group
+                    await set(ref(db, `groups/${groupId}/users/`),
+                        arrParticipants
+                    );
                     //adding group to user
                     addGroupToUser(uid, groupId, role)
+
+                    return await arrParticipants
                 }
+
             }, (error) => {
                 return { error: error }
             });

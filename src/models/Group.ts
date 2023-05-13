@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 import { Roles } from "./Roles";
-import { addGroupToUser } from "./addGroupToUser";
+import { addGroupToUser } from "../functions/addGroupToUser";
 
 const db = getDatabase();
 
@@ -20,13 +20,18 @@ export class Group {
     //for admin=====================
     //groups are created default with their mentors
     async createGroup(groupName: any, mentorId: any, groupId: any, mentorEmail: any) {
+        //add group to 'groups' node in DB
         await set(ref(db, 'groups/' + groupId), {
             groupName: groupName,
             mentorId: mentorId,
             mentorEmail: mentorEmail,
             groupId: groupId,
-            users: []
+            users: [{
+                uid: mentorId,
+                role: Roles[2]
+            }]
         });
+        //add the gtoup to the user (here the user ids mentor)
         addGroupToUser(mentorId, groupId, Roles[2])
 
     }
