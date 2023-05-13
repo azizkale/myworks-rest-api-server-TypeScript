@@ -1,6 +1,7 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Book } from "./Book";
 import * as admin from "firebase-admin";
+import { addGroupToUser } from "./addGroupToUser";
 
 export class User {
     userName: string;
@@ -80,7 +81,6 @@ export class User {
 
     addParticipantToGroup = async (groupId: any, uid: any, role: string) => {
         const db = getDatabase();
-
         const newParticipant = {
             uid: uid,
             role: role
@@ -103,7 +103,7 @@ export class User {
                             arrParticipants
                         );
                         //adding group to user
-                        this.addGroupToUser(uid, groupId, role)
+                        addGroupToUser(uid, groupId, role)
 
                         return await arrParticipants
                     }
@@ -113,7 +113,7 @@ export class User {
                     await set(ref(db, 'participants/' + groupId + '/users'),
                         [newParticipant]);
                     //adding group to user
-                    this.addGroupToUser(uid, groupId, role)
+                    addGroupToUser(uid, groupId, role)
                 }
             }, (error) => {
                 return { error: error }
@@ -121,16 +121,5 @@ export class User {
 
     }
 
-    addGroupToUser = async (participantid: any, groupId: any, role: string) => {
-        const db = getDatabase();
 
-        await set(
-            ref(db, 'users/' + participantid + '/participants/' + groupId), {
-            groupId: groupId,
-            role: role
-        });
-
-
-
-    }
 }

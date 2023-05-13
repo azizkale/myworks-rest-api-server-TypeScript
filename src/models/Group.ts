@@ -2,6 +2,8 @@ import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 import { Roles } from "./Roles";
+import { addGroupToUser } from "./addGroupToUser";
+
 const db = getDatabase();
 
 export class Group {
@@ -25,13 +27,7 @@ export class Group {
             groupId: groupId,
             users: []
         });
-        //to find that how mony group user has. as mentor or another roles
-        await set(
-            ref(db, 'users/' + mentorId + '/groups/' + groupId), {
-            groupId: groupId,
-            role: Roles[2]
-        });
-
+        addGroupToUser(mentorId, groupId, Roles[2])
 
     }
 
