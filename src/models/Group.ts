@@ -8,7 +8,7 @@ const db = getDatabase();
 
 export class Group {
     mentorId: any;
-    participants: [User]
+    users: [User]
     groupName: any;
     groupId: any;
 
