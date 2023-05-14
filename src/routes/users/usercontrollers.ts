@@ -121,7 +121,6 @@ const addPArticipantToGroup = async (req: Request, res: Response) => {
     const groupId = req.body.groupId;
     const uid = req.body.uid;
     const role = req.body.role
-    console.log(req.body)
     instanceUser.addParticipantToGroup(groupId, uid, role).then((result) => {
         res.status(200).send(result)
     })

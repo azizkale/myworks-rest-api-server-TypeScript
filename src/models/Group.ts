@@ -3,6 +3,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 import { Roles } from "./Roles";
 import { addGroupToUser } from "../functions/addGroupToUser";
+import { concatMap, from, map, toArray } from "rxjs";
 
 const db = getDatabase();
 
@@ -70,5 +71,58 @@ export class Group {
     async deleteGroup(groupId: any) {
         const ref = await admin.database().ref('groups/');
         return await ref.child(groupId).remove();
+    }
+
+    async retrieveAllGroupsOfTheUserByuserId(userId: any): Promise<any[]> {
+        return new Promise<any[]>((resolve, reject) => {
+            this.getUsersAllGroupsAndRoles(userId).then((info) => {
+                const listGroups = info.val();
+
+                from(listGroups).pipe(
+                    concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
+                    map((group: Group | any) => ({
+                        groupId: group.val().groupId,
+                        groupName: group.val().groupName
+                    })),
+                    toArray()
+                ).subscribe(
+                    {
+                        next: (groupData: any[]) => {
+                            resolve(groupData); // Resolve the Promise with the groupData
+                        }
+
+                    }
+                );
+            }).catch((error) => {
+                reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
+            });
+        });
+    }
+
+    async retrieveSingleGroupByGroupId(groupId: any) {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('groups/' + groupId);
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                return data
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+    }
+
+    async getUsersAllGroupsAndRoles(userId: any) {
+        // getting IDs and roles of all groups of the user
+        const nodeRef = admin.database().ref(`users/${userId}/groups`);
+        return nodeRef.once('value', async (snapshot) => {
+        }, (error) => {
+            return { error: error }
+        });
     }
 }
