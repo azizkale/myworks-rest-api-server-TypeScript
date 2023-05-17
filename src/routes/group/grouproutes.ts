@@ -11,5 +11,6 @@ router.get('/group/retrievegroups', [tokenControl], groupcontrollers.retrieveGro
 router.patch('/group/updategroup', [tokenControl], groupcontrollers.updateGroup)
 router.delete('/group/deletegroup', [tokenControl], groupcontrollers.deleteGroup)
 router.get('/group/retrieveallgroupsnamesoftheuserbyuserid', [tokenControl], groupcontrollers.retrieveAllGroupsNamesOfTheUserByuserId)
+router.get('/group/retrievesinglegroupofuserbygroupid', [tokenControl], groupcontrollers.retrieveSingleGroupOfUserByGroupId)
 
 export default router;
