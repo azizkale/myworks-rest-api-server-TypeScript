@@ -72,7 +72,6 @@ export class Group {
     async deleteGroup(groupId: any) {
         // const ref = await admin.database().ref('groups/');
         deleteGroupFromUsers(groupId)
-
         // return await ref.child(groupId).remove();
     }
 

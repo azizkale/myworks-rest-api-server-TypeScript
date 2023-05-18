@@ -3,7 +3,6 @@ import * as admin from "firebase-admin";
 
 
 export const deleteGroupFromUsers = async (groupId: any) => {
-    const db = getDatabase();
 
     const usersOfTheGroup = await admin.database().ref(`groups/${groupId}/users`)
     return usersOfTheGroup.once('value', async (snapshot) => {
@@ -22,9 +21,20 @@ export const deleteGroupFromUsers = async (groupId: any) => {
                 const nodeRef = await admin.database().ref(`users/${userId}/groups`)
                 await nodeRef.once('value', async (snapshot) => {
                     const groups = snapshot.val() || []
+
                     //remove selected group by groupId
-                    await groups.filter((group: any) => group.groupId !== groupId);
-                    return nodeRef.set(['azi kale'])
+                    const newGroupsArray = groups.filter((info: any) => info.groupId !== groupId)
+
+                    console.log(newGroupsArray)
+                    const ref = admin.database().ref(`users/${userId}/groups`)
+                    return ref.update(newGroupsArray)
+                        .then(() => {
+                            return { newGroupsArray }
+                        })
+                        .catch((error) => {
+                            console.error("Error updating data:", error);
+                            return { errror: error }
+                        });
 
                 })
 

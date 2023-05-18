@@ -45,6 +45,8 @@ const deleteGroup = async (req: Request, res: Response) => {
     const groupId = req.body.groupId;
     instanceGroup.deleteGroup(groupId).then((result) => {
         res.status(200).send(result)
+    }).catch((error) => {
+        res.status(404).send({ error: error.message })
     })
 }
 
