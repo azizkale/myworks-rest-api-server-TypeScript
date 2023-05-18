@@ -41,6 +41,8 @@ export class User {
                     displayName: userRecords.displayName,
                     uid: userRecords.uid
                 }
+            }).catch(error => {
+                return { error: error.message }
             })
     }
 
@@ -62,39 +64,30 @@ export class User {
     }
 
     retrieveUserByEmail = async (email: any) => {
-        try {
-            const userRecord = admin.auth().getUserByEmail(email);
-            return userRecord;
-        } catch (error) {
-            if (error.code === 'auth/user-not-found') {
-                return {
-                    error: 'User not found'
-                };
-            } else {
-                return {
-                    error: 'Error fetching user info'
-                };
-            }
-        }
-
+        return admin.auth().getUserByEmail(email).then(userRecord => {
+            return userRecord
+        }).catch(error => {
+            return { error: error.message }
+        })
     }
 
-    addParticipantToGroup = async (groupId: any, uid: any, role: string) => {
+    addParticipantToGroup = async (groupId: any, email: any, role: string) => {
         const db = getDatabase();
+
         const newParticipant = {
             role: role,
-            uid: uid,
+            email: email,
         }
         // retrieve group
         return admin.database().ref(`groups/${groupId}/users/`)
             .once('value', async (snapshot) => {
 
                 //if there is an user-array already
-                const arrParticipants = await snapshot.val();
+                const arrParticipants = await snapshot.val() || [];
 
                 //controlling if the array has the users already
-                const isIncluded = arrParticipants.some((obj) => {
-                    return obj.uid === newParticipant.uid && obj.role === newParticipant.role;
+                const isIncluded = arrParticipants?.some((obj) => {
+                    return obj.email === newParticipant.email && obj.role === newParticipant.role;
                 });
 
                 if (isIncluded) {
@@ -106,7 +99,12 @@ export class User {
                         arrParticipants
                     );
                     //adding group to user
-                    addGroupToUser(uid, groupId, role)
+                    await admin.auth().getUserByEmail(email).then((userRecord) => {
+                        addGroupToUser(userRecord.uid, groupId, role)
+                    }).catch((error) => {
+                        return { error: error.message }
+                    })
+
 
                     return await arrParticipants
                 }

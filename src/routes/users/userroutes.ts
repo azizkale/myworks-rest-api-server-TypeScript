@@ -12,7 +12,7 @@ router.post('/users/createuser', usercontroller.createUser);
 router.get('/users/getUserById', usercontroller.getUserById);
 router.get('/users/retrieveallusers', usercontroller.retrieveAllUsers)
 router.get('/users/retrieveeditorbyid', usercontroller.retrieveEditorbyEditorId)
-router.get('/users/retrieuserbyemail', usercontroller.retrieveUserByEmail)
+router.get('/users/retrieveuserbyemail', usercontroller.retrieveUserByEmail)
 router.patch('/users/addroletouser', usercontroller.addRoleToUser)
 router.patch('/users/addparticipant', tokenControl, usercontroller.addPArticipantToGroup)
 export default router

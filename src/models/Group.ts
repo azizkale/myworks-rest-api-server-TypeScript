@@ -4,6 +4,7 @@ import { User } from "./User";
 import { Roles } from "./Roles";
 import { addGroupToUser } from "../functions/addGroupToUser";
 import { concatMap, from, map, toArray } from "rxjs";
+import { deleteGroupFromUsers } from "../functions/deleteGroupFromUser";
 
 const db = getDatabase();
 
@@ -28,11 +29,11 @@ export class Group {
             mentorEmail: mentorEmail,
             groupId: groupId,
             users: [{
-                uid: mentorId,
+                email: mentorEmail,
                 role: Roles[2]
             }]
         });
-        //add the gtoup to the user (here the user ids mentor)
+        //add the group to the user (here the userId is mentorId)
         addGroupToUser(mentorId, groupId, Roles[2])
 
     }
@@ -69,8 +70,10 @@ export class Group {
     }
 
     async deleteGroup(groupId: any) {
-        const ref = await admin.database().ref('groups/');
-        return await ref.child(groupId).remove();
+        // const ref = await admin.database().ref('groups/');
+        deleteGroupFromUsers(groupId)
+
+        // return await ref.child(groupId).remove();
     }
 
     async retrieveAllGroupsOfTheUserByuserId(userId: any): Promise<any[]> {

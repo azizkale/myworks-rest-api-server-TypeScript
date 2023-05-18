@@ -44,16 +44,13 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 const getUserById = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
     const userId: string | any = req.query.uid
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        admin.auth().getUser(userId)
-            .then((userRecord) => {
-                return res.status(200).send(userRecord)
-            })
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+    admin.auth().getUser(userId)
+        .then((userRecord) => {
+            return res.status(200).send(userRecord)
+        }).catch(error => {
+            return { error: error.message }
+        })
 
 }
 
@@ -109,20 +106,20 @@ const addRoleToUser = async (req: Request, res: Response) => {
 }
 
 const retrieveUserByEmail = async (req: Request, res: Response) => {
-    const email: string | any = req.query.email
+    const email: any = req.query.email
     instanceUser.retrieveUserByEmail(email).then((result) => {
-        res.send(result)
+        res.status(200).send(result)
     }).catch((error) => {
-        res.status(401).send({ error: 'error' })
+        res.status(404).send({ error: error.message })
     })
 }
 
 const addPArticipantToGroup = async (req: Request, res: Response) => {
-    const groupId = req.body.groupId;
-    const uid = req.body.uid;
-    const role = req.body.role
-    instanceUser.addParticipantToGroup(groupId, uid, role).then((result) => {
+    const { groupId, email, role } = req.body
+    await instanceUser.addParticipantToGroup(groupId, email, role).then((result) => {
         res.status(200).send(result)
+    }).catch((error) => {
+        res.status(404).send({ error: error.message })
     })
 }
 
