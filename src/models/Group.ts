@@ -80,7 +80,7 @@ export class Group {
             this.getUsersAllGroupsAndRoles(userId).then((info) => {
                 const listGroups = info.val();
 
-                from(listGroups).pipe(
+                from(Object.values(listGroups)).pipe(
                     concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
                     map((group: Group | any) => ({
                         groupId: group.val().groupId,
