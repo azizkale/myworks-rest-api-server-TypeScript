@@ -70,9 +70,9 @@ export class Group {
     }
 
     async deleteGroup(groupId: any) {
-        // const ref = await admin.database().ref('groups/');
-        deleteGroupFromUsers(groupId)
-        // return await ref.child(groupId).remove();
+        await deleteGroupFromUsers(groupId)
+        const ref = await admin.database().ref('groups/');
+        return await ref.child(groupId).remove();
     }
 
     async retrieveAllGroupsOfTheUserByuserId(userId: any): Promise<any[]> {
