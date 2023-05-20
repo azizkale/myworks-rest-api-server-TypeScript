@@ -124,4 +124,13 @@ const addPArticipantToGroup = async (req: Request, res: Response) => {
     })
 }
 
-export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup };
+const getUserRoles = async (req: Request, res: Response) => {
+    const uid = req.query.uid
+    instanceUser.getUserRoles(uid).then((roles) => {
+        res.status(200).send(roles)
+    }).catch((error) => {
+        res.status(404).send({ error: error.message })
+    })
+}
+
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup, getUserRoles };

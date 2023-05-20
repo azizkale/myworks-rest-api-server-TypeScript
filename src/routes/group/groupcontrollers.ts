@@ -68,4 +68,8 @@ const retrieveSingleGroupOfUserByGroupId = async (req: Request, res: Response) =
     })
 }
 
-export default { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId };
+const retrieveAllParticipantsOfThegroupByGroupId = async (req: Request, res: Response) => {
+
+}
+
+export default { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId };

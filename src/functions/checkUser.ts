@@ -8,6 +8,9 @@ initializeApp({
 });
 
 export const checkUser = async (email) => {
-  const user = await admin.auth().getUserByEmail(email);
-  await console.log(user)
+  const user = await admin.auth().getUserByEmail(email).then((userRecord) => {
+    console.log(userRecord)
+  }).catch((error) => {
+    console.log(error.message)
+  })
 };

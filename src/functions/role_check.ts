@@ -1,12 +1,13 @@
 import * as admin from "firebase-admin";
 import { NextFunction, Request, Response } from 'express';
 
-const chechkRole = async (req: Request, res: Response, next: NextFunction) => {
+export const chechkRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const idToken = await req.body.token || req.headers['authorization'].split(' ')[1];
         admin.auth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
+                console.log(decodedToken)
                 // Token is valid.   
                 if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
                     next();

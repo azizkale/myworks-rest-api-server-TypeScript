@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
-import { addRole } from "./src/functions/addRole";
 import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
 import hatimroutes from './src/routes/hatim/hatimroutes'
@@ -12,6 +11,8 @@ import pirroutes from './src/routes/works/pir/pirroutes'
 import generalroutes from './src/routes/general/generalroutes'
 import grouprotes from './src/routes/group/grouproutes'
 import displayroutes from './src/routes/displays/pir/pirroutes'
+import { removeRole } from './src/functions/role_remove';
+import { addRole } from './src/functions/role_add';
 
 const port = process.env.PORT || 3000;
 
@@ -66,34 +67,24 @@ app.use('/', pirroutes)
 app.use('/', generalroutes)
 app.use('/', displayroutes)
 app.use('/', grouprotes)
-// #############################################################################
-// Catch all handler for all other request.
-// app.use("*", (req, res) => {
-//   res
-//     .json({
-//       at: new Date().toISOString(),
-//       method: req.method,
-//       hostname: req.hostname,
-//       ip: req.ip,
-//       query: req.query,
-//       headers: req.headers,
-//       cookies: req.cookies,
-//       params: req.params,
-//     })
-//     .end();
-// });
+
 
 app.get("/checkuser", (req, res) => {
   checkUser("azizkale@hotmail.com");
 });
 
-app.get("/adduser", (req, res) => {
+app.get("/checkrole", (req, res) => {
 
-  // createUser("azizkale@hotmail.com", "123456");
 });
 
 app.get("/addrole", (req, res) => {
-  addRole("azizkale@hotmail.com", 'editor_pir');
+  const { uid, role } = req.query
+  addRole(uid, role);
+});
+
+app.get("/removerole", (req, res) => {
+  const { email, role } = req.query
+  removeRole(email, role);
 });
 
 app.listen(port, () => {

@@ -28,11 +28,12 @@ export class Group {
             mentorId: mentorId,
             mentorEmail: mentorEmail,
             groupId: groupId,
-            users: [{
-                email: mentorEmail,
-                role: Roles[2]
-            }]
         });
+
+        await set(ref(db, `groups/${groupId}/users/${mentorId}`), {
+            email: mentorEmail,
+            role: Roles[2]
+        })
         //add the group to the user (here the userId is mentorId)
         addGroupToUser(mentorId, groupId, Roles[2])
 
@@ -90,13 +91,13 @@ export class Group {
                 ).subscribe(
                     {
                         next: (groupData: any[]) => {
-                            resolve(groupData); // Resolve the Promise with the groupData
+                            return resolve(groupData); // Resolve the Promise with the groupData
                         }
 
                     }
                 );
             }).catch((error) => {
-                reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
+                return reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
             });
         });
     }
@@ -123,6 +124,24 @@ export class Group {
         // getting IDs and roles of all groups of the user
         const nodeRef = admin.database().ref(`users/${userId}/groups`);
         return nodeRef.once('value', async (snapshot) => {
+        }, (error) => {
+            return { error: error }
+        });
+    }
+
+    async retrieveAllUsersOfTheGroup(groupId: any) {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('groups/' + groupId);
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                return data
+
+            } else {
+                return null
+            }
         }, (error) => {
             return { error: error }
         });

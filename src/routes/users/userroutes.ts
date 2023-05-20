@@ -15,4 +15,5 @@ router.get('/users/retrieveeditorbyid', usercontroller.retrieveEditorbyEditorId)
 router.get('/users/retrieveuserbyemail', usercontroller.retrieveUserByEmail)
 router.patch('/users/addroletouser', usercontroller.addRoleToUser)
 router.patch('/users/addparticipant', tokenControl, usercontroller.addPArticipantToGroup)
+router.get('/users/getuserroles', tokenControl, usercontroller.getUserRoles)
 export default router
