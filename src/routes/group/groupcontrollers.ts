@@ -69,7 +69,12 @@ const retrieveSingleGroupOfUserByGroupId = async (req: Request, res: Response) =
 }
 
 const retrieveAllParticipantsOfThegroupByGroupId = async (req: Request, res: Response) => {
-
+    const groupId = req.query.groupId
+    instanceGroup.retrieveAllUsersOfTheGroup(groupId).then((users) => {
+        res.status(200).send(users)
+    }).catch((error) => {
+        res.status(200).send({ error: error.message })
+    })
 }
 
 export default { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId };

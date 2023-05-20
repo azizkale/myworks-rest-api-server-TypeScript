@@ -131,7 +131,7 @@ export class Group {
 
     async retrieveAllUsersOfTheGroup(groupId: any) {
         // Get a reference to the desired node in the database
-        const nodeRef = admin.database().ref('groups/' + groupId);
+        const nodeRef = admin.database().ref('groups/' + groupId + '/users');
         // Read the data at the node once
         return nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
