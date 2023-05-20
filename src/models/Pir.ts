@@ -65,6 +65,25 @@ export class Pir {
         });
     }
 
+    async retrievePirsByPirEditorId(pirEditorId: any) {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('pir');
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                const editorsPirs = (Object.values(data)).filter((pir: Pir) => pir.pirId.editorId === pirEditorId)
+                return editorsPirs
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+    }
+
     async updateChapter(chapter: Chapter) {
         const db = admin.database();
         const ref = db.ref('pir/' + chapter.pirId + '/chapters/' + chapter.chapterId);

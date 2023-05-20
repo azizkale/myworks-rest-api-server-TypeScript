@@ -35,28 +35,10 @@ const createPir = async (req: Request, res: Response) => {
 }
 
 const retrievePirs = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        pirInstance.retrievePirs().then((pirs) => {
-            return res.status(200).send(pirs)
-        })
-    }).catch((err) => {
-        return res.status(401).send(err.message);
+    const pirEditorId = req.query.pirEditorId;
+    pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
+        return res.status(200).send(pirs)
     })
-    // pirInstance.retrievePirs().then(async (dataSnapshot) => {
-    //     const dataArray = Object.values(dataSnapshot.val());
-
-    //     const newDataArray = await dataArray.map((data: Pir) => {
-    //         return {
-    //             pirId: data.pirId,
-    //             name: data.name
-    //         };
-    //     });
-    //     return res.status(200).send(newDataArray)
-    // }).catch((error) => {
-    //     return res.status(401).send(error.message);
-
-    // });
 }
 
 const createChapter = async (req: Request, res: Response) => {
@@ -98,7 +80,7 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
         return res.status(200).send(chapters)
 
     }).catch((error) => {
-        return res.status(401).send(error.message);
+        return res.status(401).send({ error: error.message });
     })
 }
 

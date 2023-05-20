@@ -1,7 +1,5 @@
 import { getDatabase, ref, set } from "firebase/database";
 import * as admin from "firebase-admin";
-import { Chapter } from "./Chapter";
-import { from, of } from "rxjs";
 
 export class WordPair {
     wordPairId: any;
@@ -43,23 +41,4 @@ export class WordPair {
         return await ref.child(wordPair.wordPairId).remove();
 
     }
-
-    //async retrieveAllWordPairsOfSinglePir_(pirId: any) {
-    // const nodeRef = admin.database().ref('pir/' + pirId + '/chapters');
-    // // Read the data at the node once
-    // await nodeRef.once('value', async (snapshot) => {
-    //     if (snapshot.exists()) {
-    //         const chapters = snapshot.val();
-    //         let wordpairs: any[] = []
-    //         await Object.values(chapters).map((data: any) => {
-    //             wordpairs.push(data.wordPairs)
-    //         })
-    //         return await (wordpairs)
-    //     } else {
-    //         return null
-    //     }
-    // }, (error) => {
-    //     return { error: error }
-    // });
-    //}
 }
