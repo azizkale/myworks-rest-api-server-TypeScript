@@ -36,13 +36,13 @@ export class Pir {
 
     async createPir(pir: Pir) {
 
-        pirlist.map(async (pir: any) => {
-            await set(ref(db, 'pirs/' + pir._id), {
-                pirId: pir._id,
-                name: pir.name,
-                description: pir.details,
-            });
-        })
+        // pirlist.map(async (pir: any) => {
+        //     await set(ref(db, 'pirs/' + pir._id), {
+        //         pirId: pir._id,
+        //         name: pir.name,
+        //         description: pir.details,
+        //     });
+        // })
 
 
         // await set(ref(db, 'pir/' + pir.pirId), {

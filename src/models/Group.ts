@@ -3,7 +3,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 import { Roles } from "./Roles";
 import { addGroupToUser } from "../functions/addGroupToUser";
-import { concatMap, from, map, toArray } from "rxjs";
+import { concatMap, filter, from, map, toArray } from "rxjs";
 import { deleteGroupFromUsers } from "../functions/deleteGroupFromUser";
 
 const db = getDatabase();
@@ -145,5 +145,39 @@ export class Group {
         }, (error) => {
             return { error: error }
         });
+    }
+
+    //gets groups of a mentor in which mentor is not a participant  
+    async retrieveAllGroupsOfTheMentor(mentorId: any): Promise<any[]> {
+        const nodeRef = admin.database().ref(`users/${mentorId}/groups`);
+        const snapshot = await nodeRef.once('value');
+
+        if (snapshot.exists()) {
+            const groups = snapshot.val();
+
+            for (const obj of Object.values(groups)) {
+                await this.getGroupNameByGroupId(obj['groupId']).then((name) => {
+                    obj['groupName'] = name;
+                })
+            }
+            return await from(Object.values(groups)).pipe(
+                filter((groupinfo: any) => groupinfo.role === Roles[2]),
+                toArray()
+            ).toPromise();
+        } else {
+            return [];
+        }
+
+    }
+    async getGroupNameByGroupId(groupId: any) {
+        const nodeRef = admin.database().ref(`groups/${groupId}`);
+        const snapshot = await nodeRef.once('value');
+        if (snapshot.exists()) {
+            const group = snapshot.val();
+            //filtering groups according mentors role
+            return group.groupName
+        } else {
+            return ''
+        }
     }
 }

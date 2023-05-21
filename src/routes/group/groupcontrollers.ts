@@ -77,4 +77,12 @@ const retrieveAllParticipantsOfThegroupByGroupId = async (req: Request, res: Res
     })
 }
 
-export default { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId };
+const retrieveAllGroupsOfTheMentor = async (req: Request, res: Response) => {
+    const mentorId = req.query.mentorId;
+    instanceGroup.retrieveAllGroupsOfTheMentor(mentorId).then((data) => {
+        res.status(200).send(data)
+    }).catch((error) => {
+        res.status(200).send({ error: error.message })
+    })
+}
+export default { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId, retrieveAllGroupsOfTheMentor };
