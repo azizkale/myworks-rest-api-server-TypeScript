@@ -5,7 +5,7 @@ import { Chapter } from '../../../models/Chapter';
 import { WordPair } from '../../../models/WordPair';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
-const pirInstance = new Pir(null, null, null, null, null)
+const pirInstance = new Pir(null, null, null, null, null, null, null)
 const wordPairInstance = new WordPair(null, null, null, null, null)
 
 const createPir = async (req: Request, res: Response) => {
@@ -225,4 +225,12 @@ const deleteWordPair = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters }
+const retrievePirListToCreateNewPirToEdit = async (req: Request, res: Response) => {
+    pirInstance.retrievePirList().then((data) => {
+        res.status(200).send(data)
+    }).catch((error) => {
+        res.status(200).send({ error: error.message })
+    })
+}
+
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit }

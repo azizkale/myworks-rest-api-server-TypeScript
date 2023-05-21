@@ -1,7 +1,8 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
-
+import pirlist from '../../pirs.json'
+import { WordPair } from "./WordPair";
 const db = getDatabase();
 
 export class Pir {
@@ -9,31 +10,47 @@ export class Pir {
     editorId: any;
     name: string | any;
     description: string;
-    chapters: Chapter[];
+    chapters: Chapter[]
+    wordPairs: WordPair[]
+    groupId: any // which group edits the pir
 
     constructor(
         pirId: any,
         editorId: any,
+        groupId: any,
         name: string | any,
         description: string,
         chapters: Chapter[],
+        wordPairs: WordPair[]
     ) {
         this.pirId = pirId
         this.editorId = editorId
+        this.groupId = groupId
         this.name = name
         this.description = description
         this.chapters = chapters
+        this.wordPairs = wordPairs
 
     }
 
 
     async createPir(pir: Pir) {
-        await set(ref(db, 'pir/' + pir.pirId), {
-            pirId: pir.pirId,
-            name: pir.name,
-            description: pir.description,
-            editorId: pir.editorId,
-        });
+
+        pirlist.map(async (pir: any) => {
+            await set(ref(db, 'pirs/' + pir._id), {
+                pirId: pir._id,
+                name: pir.name,
+                description: pir.details,
+            });
+        })
+
+
+        // await set(ref(db, 'pir/' + pir.pirId), {
+        //     pirId: pir.pirId,
+        //     name: pir.name,
+        //     description: pir.description,
+        //     editorId: pir.editorId,
+        // });
     }
 
     async addChapterToPir(chapter: Chapter) {
@@ -57,6 +74,20 @@ export class Pir {
                 const data = snapshot.val();
                 return data
 
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+    }
+
+    async retrievePirList() {
+        const nodeRef = admin.database().ref('pirs');
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                return data
             } else {
                 return null
             }

@@ -23,4 +23,6 @@ router.patch('/pir/updatewordpair', tokenControl, pircontrollers.updateWordPair)
 router.get('/pir/getallwordpairsofsinglepir', tokenControl, pircontrollers.retrieveAllWordPairsOfSinglePir)
 router.delete('/pir/deletewordpair', tokenControl, pircontrollers.deleteWordPair)
 
+router.get('/pir/retrievepirlist', tokenControl, pircontrollers.retrievePirListToCreateNewPirToEdit)
+
 export default router;
