@@ -25,5 +25,6 @@ router.delete('/pir/deletewordpair', tokenControl, pircontrollers.deleteWordPair
 
 router.get('/pir/retrievepirlist', tokenControl, pircontrollers.retrievePirListToCreateNewPirToEdit)
 router.post('/pir/assignpirtogroup', tokenControl, pircontrollers.assingPirToGroup)
+router.get('/pir/retrievepirbypirid', tokenControl, pircontrollers.retrievePirByPirId)
 
 export default router;

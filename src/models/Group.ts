@@ -5,6 +5,7 @@ import { Roles } from "./Roles";
 import { addGroupToUser } from "../functions/addGroupToUser";
 import { concatMap, filter, from, map, toArray } from "rxjs";
 import { deleteGroupFromUsers } from "../functions/deleteGroupFromUser";
+import { cuz } from "./cuz";
 
 const db = getDatabase();
 
@@ -13,6 +14,10 @@ export class Group {
     users: [User]
     groupName: any;
     groupId: any;
+    works: {
+        hatim: cuz[],
+        pirs: any[]// just pirIds
+    }
 
     constructor(groupName: any, mentorId: any) {
         this.groupName = groupName,

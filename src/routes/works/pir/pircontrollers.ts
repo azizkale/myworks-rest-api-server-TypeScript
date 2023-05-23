@@ -36,6 +36,7 @@ const assingPirToGroup = async (req: Request, res: Response) => {
     })
 
 }
+
 const retrievePirs = async (req: Request, res: Response) => {
     const pirEditorId = req.query.pirEditorId;
     pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
@@ -221,5 +222,13 @@ const retrievePirListToCreateNewPirToEdit = async (req: Request, res: Response) 
     })
 }
 
+const retrievePirByPirId = async (req: Request, res: Response) => {
+    const pirId = req.query.pirId;
+    pirInstance.retrievePirByPirid(pirId).then((pir: any) => {
+        res.status(200).send(pir)
+    }).catch((error) => {
+        res.status(200).send({ error: error.message })
+    })
+}
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup }
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup, retrievePirByPirId }

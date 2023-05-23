@@ -2,7 +2,10 @@ import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
 import { WordPair } from "./WordPair";
+import { Group } from "./Group";
+import { from, of, tap } from "rxjs";
 
+const groupInstance = new Group(null, null)
 const db = getDatabase();
 
 export class Pir {
@@ -10,8 +13,9 @@ export class Pir {
     editorId: any;
     name: string | any;
     description: string;
-    chapters: Chapter[]
-    wordPairs: WordPair[]
+    assigned: boolean;
+    chapters: Chapter[];
+    wordPairs: WordPair[];
     groupId: any // which group edits the pir
 
     constructor(
@@ -43,6 +47,7 @@ export class Pir {
         });
     }
 
+    //this manipulates three nodes in DB
     async assignPirToGroup(pir: Pir) {
 
         //adds pir to the node 'pir' in db
@@ -52,11 +57,21 @@ export class Pir {
             description: pir.description,
             editorId: pir.editorId,
             groupId: pir.groupId
+        }).then(async () => {
+            //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db)
+            await this.addPirToTheNodeInDb(pir).then(async () => {
+                await this.addAssignedPirToGroupsWorks(pir)
+            })
+        }).catch((error) => {
+            console.error("Error updating data:", error);
+            return { errror: error }
         });
+    }
 
-        //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db)
-        const refff = admin.database().ref(`pirs/${pir.pirId}`);
-        return refff.update({
+    //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db) / is used in assignPirToGroup(pir: Pir)
+    async addPirToTheNodeInDb(pir: Pir) {
+        const reff = admin.database().ref(`pirs/${pir.pirId}`);
+        reff.update({
             assigned: true,
             groupId: pir.groupId
         })
@@ -67,6 +82,34 @@ export class Pir {
                 console.error("Error updating data:", error);
                 return { errror: error }
             });
+    }
+
+    //add assigned pir to groups works (works/pirs) / / is used in assignPirToGroup(pir: Pir)
+    async addAssignedPirToGroupsWorks(pir: Pir) {
+        const refff = admin.database().ref(`groups/${pir.groupId}/works/pirs/${pir.pirId}`);
+        return refff.update({
+            pirId: pir.pirId
+        })
+            .then(async () => {
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
+    }
+
+    async retrievePirByPirid(pirId: any) {
+        const nodeRef = admin.database().ref(`pirs/${pirId}`);
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                return data
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
     }
 
     async addChapterToPir(chapter: Chapter) {
@@ -100,9 +143,19 @@ export class Pir {
 
     async retrievePirList() {
         const nodeRef = admin.database().ref('pirs');
-        return nodeRef.once('value', (snapshot) => {
+        return nodeRef.once('value', async (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
+
+                await from(Object.values(data)).pipe(
+                    tap((pir: any) => {
+                        if (pir.assigned) {
+                            groupInstance.retrieveSingleGroupByGroupId(pir.groupId).then((dd) => {
+                                console.log(dd.val().groupName)
+                            })
+                        }
+                    })
+                ).subscribe()
                 return data
             } else {
                 return null
