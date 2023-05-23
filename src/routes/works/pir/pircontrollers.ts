@@ -25,6 +25,17 @@ const createPir = async (req: Request, res: Response) => {
 
 }
 
+const assingPirToGroup = async (req: Request, res: Response) => {
+    const pir = req.body.pir
+    pirInstance.assignPirToGroup(pir).then((pir) => {
+        res.status(200).send({ response: pir + ' added' })
+    }).catch((error) => {
+        res.status(401).send(
+            { error: error.message }
+        )
+    })
+
+}
 const retrievePirs = async (req: Request, res: Response) => {
     const pirEditorId = req.query.pirEditorId;
     pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
@@ -35,24 +46,10 @@ const retrievePirs = async (req: Request, res: Response) => {
 const createChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     chapter.chapterId = uuidv1();
-    const token = req.headers['authorization'].split(' ')[1];
-
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        try {
-            pirInstance.addChapterToPir(chapter).then(() => {
-                res.status(200).send(chapter);
-            }).catch((err) => {
-                return res.status(409).send(
-                    { error: err.message }
-                );
-            })
-        } catch (err) {
-            return res.status(409).send(
-                { error: err.message }
-            );
-        }
+    pirInstance.addChapterToPir(chapter).then(() => {
+        res.status(200).send(chapter);
     }).catch((err) => {
-        return res.status(401).send(
+        return res.status(409).send(
             { error: err.message }
         );
     })
@@ -225,4 +222,4 @@ const retrievePirListToCreateNewPirToEdit = async (req: Request, res: Response) 
 }
 
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit }
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup }

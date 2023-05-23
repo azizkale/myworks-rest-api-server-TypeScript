@@ -1,8 +1,8 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
-import pirlist from '../../pirs.json'
 import { WordPair } from "./WordPair";
+
 const db = getDatabase();
 
 export class Pir {
@@ -41,6 +41,32 @@ export class Pir {
             name: pir.name,
             description: pir.description,
         });
+    }
+
+    async assignPirToGroup(pir: Pir) {
+
+        //adds pir to the node 'pir' in db
+        await set(ref(db, 'pir/' + pir.pirId), {
+            pirId: pir.pirId,
+            name: pir.name,
+            description: pir.description,
+            editorId: pir.editorId,
+            groupId: pir.groupId
+        });
+
+        //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db)
+        const refff = admin.database().ref(`pirs/${pir.pirId}`);
+        return refff.update({
+            assigned: true,
+            groupId: pir.groupId
+        })
+            .then(() => {
+                return { pir }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
     }
 
     async addChapterToPir(chapter: Chapter) {
