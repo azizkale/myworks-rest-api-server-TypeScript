@@ -4,60 +4,46 @@ import * as admin from "firebase-admin";
 
 const hatim = new Hatim();
 const createHatim = async (req: Request, res: Response) => {
-
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        await hatim.createHatim();
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+    const { groupId } = req.body;
+    return await hatim.createHatim(groupId);
 };
+
 const retrieveHatim = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        //
-        await hatim.retrieveAllCuzs().then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        })
-        //
+    const groupId = req.query.groupId
+
+    await hatim.retrieveAllCuzs(groupId).then((data) => {
+        res.status(200).send(data);
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
 
-}
-const updateHatim = async (req: Request, res: Response) => {
-    const { cuz, cuznumber } = req.body;
-    const token = req.headers['authorization'].split(' ')[1];
 
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        await hatim.updateHatim(cuznumber, cuz).then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        })
+}
+
+const updateHatim = async (req: Request, res: Response) => {
+    const { cuz, cuznumber, groupId } = req.body;
+
+    await hatim.updateHatim(cuznumber, cuz, groupId).then((data) => {
+        res.status(200).send(data);
     }).catch((err) => {
-        console.log(err)
+        return res.status(401).send(err.message);
     })
 }
+
 const deleteHatim = async (req: Request, res: Response) => {
     console.log('deleted')
 }
+
 const getSingleCuz = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    const cuznumber: number | any = req.query.cuznumber;
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        //
-        await hatim.getSingleCuz(cuznumber).then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        })
-        //
+    const cuzname: any = req.query.cuzname;
+    const groupId = req.query.groupId;
+    console.log(cuzname + '  ' + groupId)
+    await hatim.getSingleCuz(cuzname, groupId).then((data) => {
+        res.status(200).send(data);
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
+
 }
 const getReaderName = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];

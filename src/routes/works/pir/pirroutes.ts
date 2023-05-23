@@ -7,7 +7,7 @@ import chechkRole from '../../../functions/role_check';
 const router = express.Router();
 
 router.use(bodyParser.json());
-router.post('/pir/create', chechkRole, pircontrollers.createPir);
+router.post('/pir/create', tokenControl, pircontrollers.createPir);
 router.get('/pir/getpirs', tokenControl, pircontrollers.retrievePirs)
 router.patch('/pir/updatepir', tokenControl, pircontrollers.updatePir)
 router.delete('/pir/deletepir', tokenControl, pircontrollers.deletePir)

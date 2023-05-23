@@ -10,28 +10,19 @@ const wordPairInstance = new WordPair(null, null, null, null, null)
 
 const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
-    newPir.pirId = await uuidv1();
-    const token = req.headers['authorization'].split(' ')[1];
-    console.log(newPir)
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        try {
-            await pirInstance.createPir(newPir).then(() => {
-                res.status(200).send(newPir);
-            }).catch((err) => {
-                return res.status(409).send(
-                    { error: err.message }
-                );
-            })
-        } catch (err) {
-            return res.status(409).send(
-                { error: err.message }
-            );
-        }
+
+    if (newPir.pirId === null) {
+        newPir.pirId = await uuidv1();
+    }
+
+    await pirInstance.createPir(newPir).then(() => {
+        res.status(200).send(newPir);
     }).catch((err) => {
-        return res.status(401).send(
+        return res.status(409).send(
             { error: err.message }
         );
     })
+
 }
 
 const retrievePirs = async (req: Request, res: Response) => {

@@ -62,7 +62,6 @@ const retrieveAllUsers = async (req: Request, res: Response) => {
         await admin.auth().listUsers()
             .then(async (userRecords: any) => {
                 userRecords.users.map((userInfo) => {
-                    console.log(userInfo)
                     let user = {
                         displayName: userInfo.displayName,
                         uid: userInfo.uid

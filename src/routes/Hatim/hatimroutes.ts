@@ -2,7 +2,7 @@ import express from 'express';
 import hatimcontroller from './hatimcontrollers'
 import bodyParser from 'body-parser';
 import tokenControl from '../../functions/checkTokenExpiration';
-import chechkRole from '../../functions/checkRole';
+import chechkRole from '../../functions/role_check';
 
 const router = express.Router();
 

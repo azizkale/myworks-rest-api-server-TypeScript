@@ -7,7 +7,6 @@ export const chechkRole = async (req: Request, res: Response, next: NextFunction
         admin.auth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-                console.log(decodedToken)
                 // Token is valid.   
                 if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
                     next();

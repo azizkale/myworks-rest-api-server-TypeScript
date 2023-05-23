@@ -34,23 +34,13 @@ export class Pir {
     }
 
 
+    //add a mew pir to node 'pirs' in db (pirlist)
     async createPir(pir: Pir) {
-
-        // pirlist.map(async (pir: any) => {
-        //     await set(ref(db, 'pirs/' + pir._id), {
-        //         pirId: pir._id,
-        //         name: pir.name,
-        //         description: pir.details,
-        //     });
-        // })
-
-
-        // await set(ref(db, 'pir/' + pir.pirId), {
-        //     pirId: pir.pirId,
-        //     name: pir.name,
-        //     description: pir.description,
-        //     editorId: pir.editorId,
-        // });
+        await set(ref(db, 'pirs/' + pir.pirId), {
+            pirId: pir.pirId,
+            name: pir.name,
+            description: pir.description,
+        });
     }
 
     async addChapterToPir(chapter: Chapter) {
