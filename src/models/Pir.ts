@@ -3,7 +3,7 @@ import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
 import { WordPair } from "./WordPair";
 import { Group } from "./Group";
-import { from, of, tap } from "rxjs";
+import { from, map, of, tap } from "rxjs";
 
 const groupInstance = new Group(null, null)
 const db = getDatabase();
@@ -143,26 +143,22 @@ export class Pir {
 
     async retrievePirList() {
         const nodeRef = admin.database().ref('pirs');
-        return nodeRef.once('value', async (snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
+        const snapshot = await nodeRef.once('value');
+        if (snapshot.exists()) {
+            const data = snapshot.val();
 
-                await from(Object.values(data)).pipe(
-                    tap((pir: any) => {
-                        if (pir.assigned) {
-                            groupInstance.retrieveSingleGroupByGroupId(pir.groupId).then((dd) => {
-                                console.log(dd.val().groupName)
-                            })
-                        }
-                    })
-                ).subscribe()
-                return data
-            } else {
-                return null
-            }
-        }, (error) => {
-            return { error: error }
-        });
+            //adds groupname to assigned pirs
+            const updatedData = await Promise.all(Object.values(data).map(async (pir: any) => {
+                if (pir.assigned) {
+                    const groupinfo: Group | any = await groupInstance.retrieveSingleGroupByGroupId(pir.groupId);
+                    return { ...pir, groupName: groupinfo.val().groupName };
+                }
+                return { ...pir };
+            }));
+            return updatedData;
+        } else {
+            return null;
+        }
     }
 
     async retrievePirsByPirEditorId(pirEditorId: any) {
