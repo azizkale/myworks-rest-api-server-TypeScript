@@ -249,4 +249,31 @@ export class Pir {
         const ref = await admin.database().ref(`pir/${pirId}/chapters/`);
         return await ref.child(chapterId).remove();
     }
+
+    async leaveThePirFromTheGroup(pir: Pir) {
+        const db = admin.database();
+        //1- it removed the pir from groups-> works -> pirs
+        const ref = db.ref(`groups/${pir.groupId}/works/pirs/`);
+        await ref.child(pir.pirId).remove().then(() => {
+            console.log('removed from the object in the database');
+        })
+            .catch((error) => {
+                console.error('Error removing in the database:', error);
+            });
+
+        //2- it update pir in the node pirs
+        const reff = db.ref(`pirs/${pir.pirId}/`);
+        const updateData = {
+            assigned: null,
+            groupId: null
+        };
+
+        await reff.update(updateData)
+            .then(() => {
+                console.log('Features removed from the object in the database');
+            })
+            .catch((error) => {
+                console.error('Error removing features from the object in the database:', error);
+            });
+    }
 };

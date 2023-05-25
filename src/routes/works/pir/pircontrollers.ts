@@ -226,4 +226,12 @@ const retrievePirByPirId = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup, retrievePirByPirId }
+const leaveThePirFromTheGroup = async (req: Request, res: Response) => {
+    const pir = req.body.pir
+    pirInstance.leaveThePirFromTheGroup(pir).then((ress: any) => {
+        res.status(200).send(ress)
+    }).catch((error) => {
+        res.status(200).send({ error: error.message })
+    })
+}
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup, retrievePirByPirId, leaveThePirFromTheGroup }
