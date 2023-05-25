@@ -58,7 +58,7 @@ export class Pir {
             editorId: pir.editorId,
             groupId: pir.groupId
         }).then(async () => {
-            //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db)
+            //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
             await this.addPirToTheNodeInDb(pir).then(async () => {
                 await this.addAssignedPirToGroupsWorks(pir)
             })
@@ -88,7 +88,7 @@ export class Pir {
     async addAssignedPirToGroupsWorks(pir: Pir) {
         const refff = admin.database().ref(`groups/${pir.groupId}/works/pirs/${pir.pirId}`);
         return refff.update({
-            pirId: pir.pirId
+            pirName: pir.name
         })
             .then(async () => {
             })
@@ -99,7 +99,7 @@ export class Pir {
     }
 
     async retrievePirByPirid(pirId: any) {
-        const nodeRef = admin.database().ref(`pirs/${pirId}`);
+        const nodeRef = admin.database().ref(`pir/${pirId}`);
         return nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();

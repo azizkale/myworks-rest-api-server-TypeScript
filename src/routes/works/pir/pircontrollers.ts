@@ -100,13 +100,8 @@ const updateChapter = async (req: Request, res: Response) => {
 
 const updatePir = async (req: Request, res: Response) => {
     const pir: Pir = req.body.pir;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        pirInstance.updatePir(pir).then((updatedPir) => {
-            return res.status(200).send(updatedPir)
-        })
-    }).catch((err) => {
-        console.log(err)
+    pirInstance.updatePir(pir).then((updatedPir) => {
+        return res.status(200).send(updatedPir)
     })
 }
 
