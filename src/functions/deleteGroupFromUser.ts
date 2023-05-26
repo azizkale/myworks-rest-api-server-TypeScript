@@ -9,19 +9,14 @@ export const deleteGroupFromUsers = async (groupId: any) => {
         if (snapshot.exists()) {
             // access all users of the group
             const data = snapshot.val();
-            //data =>  [{ email: 'azizkale@hotmail.com', role: 'mentor' },
-            //          { email: 'aziz@hotmail.com', role: 'participant' }]
 
-            //getting userId by email
-            await data.map(async (data: any) => {
-                const userId = await admin.auth().getUserByEmail(data.email).then((userRecord) => {
-                    return userRecord.uid
-                })
+            //getting user's IDs 
+            const arrUsersId = Object.keys(data)
 
-                //remove group of user from the node '`users/${userId}/groups/${groupId}`'
+            //removes the group from all users of the froup the node '`users/${userId}/groups/${groupId}`'
+            await arrUsersId.map(async (userId: any) => {
                 const nodeRef = await admin.database().ref(`users/${userId}/groups/`)
                 return await nodeRef.child(groupId).remove();
-
             })
 
         } else {
