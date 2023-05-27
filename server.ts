@@ -1,4 +1,6 @@
 import express from 'express';
+import swaggerUI from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
 import cors from 'cors';
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
@@ -68,6 +70,32 @@ app.use('/', generalroutes)
 app.use('/', displayroutes)
 app.use('/', grouprotes)
 
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Library API',
+      version: '1.0.0',
+      description: 'My Works Library API',
+      termsOfService: '',
+      contact: {
+        name: 'API Support',
+        url: '',
+        email: '',
+      },
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'My Works API Documentation',
+      },
+    ],
+  },
+  apis: ['./src/routes/users/userroutes.ts'],
+};
+const specs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get("/checkuser", (req, res) => {
   checkUser("azizkale@hotmail.com");
