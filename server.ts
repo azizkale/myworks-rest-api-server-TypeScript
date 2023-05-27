@@ -4,7 +4,7 @@ const app = express();
 import { checkUser } from "./src/functions/checkUser";
 import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
-import hatimroutes from './src/routes/hatim/hatimroutes'
+import hatimroutes from './src/routes/Hatim/hatimroutes'
 import settingsroutes from './src/routes/settings/settingsroutes'
 import shbroutes from './src/routes/works/Shb/shbRoutes'
 import pirroutes from './src/routes/works/pir/pirroutes'
