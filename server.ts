@@ -2,6 +2,9 @@ import express from 'express';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import cors from 'cors';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
 import userroutes from './src/routes/users/userroutes';
@@ -71,6 +74,9 @@ app.use('/', displayroutes)
 app.use('/', grouprotes)
 
 
+const usersYamlFilePath = require('path').resolve(__dirname, './src/routes/users/users.yaml')
+const usersSpec = yaml.load(fs.readFileSync(usersYamlFilePath, 'utf8'));
+
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -91,6 +97,7 @@ const swaggerOptions = {
         description: 'My Works API Documentation',
       },
     ],
+    ...usersSpec,
   },
   apis: ['./src/routes/users/userroutes.ts'],
 };
