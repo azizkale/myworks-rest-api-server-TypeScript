@@ -40,6 +40,7 @@ paths:
                   error:
                     type: string
                     description: Error message indicating authentication failure.
+
   /users/createuser:
     post:
       summary: Create User
@@ -103,3 +104,258 @@ paths:
                   message:
                     type: string
                     description: Error message indicating authentication failure.
+  
+  /users/getUserById:
+    get:
+      summary: Get User by ID
+      description: Retrieve a user by their user ID.
+      parameters:
+        - name: userId
+          in: query
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    description: User ID.
+                  name:
+                    type: string
+                    description: User's name.
+                  email:
+                    type: string
+                    description: User's email address.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Response status code.
+                  message:
+                    type: string
+                    description: Error message indicating authentication failure.
+
+  /users/retrieveallusers:
+    get:
+      summary: Retrieve All Users
+      description: Retrieve all users.
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: User ID.
+                    name:
+                      type: string
+                      description: User's name.
+                    email:
+                      type: string
+                      description: User's email address.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Response status code.
+                  message:
+                    type: string
+                    description: Error message indicating authentication failure.
+
+  /users/retrieveeditorbyid:
+    get:
+      summary: Retrieve Editor by ID
+      description: Retrieve an editor's information by their ID.
+      parameters:
+        - name: id
+          in: query
+          description: Editor's ID
+          schema:
+            type: any
+      responses:
+        '200':
+          description: Editor information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  editor:
+                    type: object
+                    description: Editor information
+                    properties:
+                      id:
+                        type: string
+                        description: Editor's ID
+                      name:
+                        type: string
+                        description: Editor's name
+        '404':
+          description: Editor not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Response status code.
+                  message:
+                    type: string
+                    description: Error message indicating editor not found.
+
+  /users/retrieveuserbyemail:
+    get:
+      summary: Retrieve User by Email
+      description: Retrieve an user's information by their Email
+      parameters:
+        - name: email
+          in: query
+          description: User's Email
+          schema:
+            type: any
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  editor:
+                    type: object
+                    description: User information
+                    properties:
+                      id:
+                        type: any
+                        description: User's ID
+                      name:
+                        type: string
+                        description: User's name
+        '404':
+          description: Editor not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Response status code.
+                  message:
+                    type: string
+                    description: Error message indicating editor not found.
+
+  /users/addroletouser:
+    patch:
+      summary: Add Role to User
+      description: Add a role to a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: any
+                  description: User's ID.
+                role:
+                  type: string
+                  description: Role to be added to the user.
+              required:
+                - userId
+                - role
+      responses:
+        '200':
+          description: Role added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    description: Response message indicating the role has been added.
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Response status code.
+                  message:
+                    type: string
+                    description: Error message indicating user not found.
+
+  /users/getuserroles:
+    get:
+      summary: Get User Roles
+      description: Retrieve the roles associated with a user.
+      parameters:
+        - name: uid
+          in: query
+          description: User's ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Roles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                    description: Array of user roles.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message indicating an invalid request.
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message indicating user not found.
+
+  

@@ -55,41 +55,30 @@ const getUserById = async (req: Request, res: Response) => {
 }
 
 const retrieveAllUsers = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
 
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        let users: any[] = []
-        await admin.auth().listUsers()
-            .then(async (userRecords: any) => {
-                userRecords.users.map((userInfo) => {
-                    let user = {
-                        displayName: userInfo.displayName,
-                        uid: userInfo.uid
-                    }
-                    users.push(user)
-                })
-                return await res.status(200).send(users)
-
+    let users: any[] = []
+    await admin.auth().listUsers()
+        .then(async (userRecords: any) => {
+            userRecords.users.map((userInfo) => {
+                let user = {
+                    displayName: userInfo.displayName,
+                    uid: userInfo.uid
+                }
+                users.push(user)
             })
-            .catch((error) => {
-                console.log('Error fetching user data:', error);
-            });
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+            return await res.status(200).send(users)
+
+        })
+        .catch((error) => {
+            console.log('Error fetching user data:', error);
+        });
 
 }
 
 const retrieveEditorbyEditorId = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
     const editorid: any = req.query.editorid
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
-            res.status(200).send(user)
-        })
-
-    }).catch((err) => {
-        return res.status(401).send(err.message);
+    instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
+        res.status(200).send(user)
     })
 }
 
@@ -124,7 +113,7 @@ const addPArticipantToGroup = async (req: Request, res: Response) => {
 }
 
 const getUserRoles = async (req: Request, res: Response) => {
-    const uid = req.query.uid
+    const uid: any = req.query.uid
     instanceUser.getUserRoles(uid).then((roles) => {
         res.status(200).send(roles)
     }).catch((error) => {

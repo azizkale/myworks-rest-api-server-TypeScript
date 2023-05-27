@@ -18,23 +18,6 @@ export class User {
         this.role = role
     }
 
-    retrieveAllUsers = async () => {
-        // let users: any[] = []
-        // return await admin.auth().listUsers()
-        //     .then(async (userRecords: any) => {
-        //         userRecords.users.map((userInfo) => {
-        //             let user = {
-        //                 displayName: userInfo.displayName,
-        //                 uid: userInfo.uid
-        //             }
-        //             users.push(user)
-        //         })
-        //     })
-        //     .catch((error) => {
-        //         console.log('Error fetching user data:', error);
-        //     });
-    }
-
     retrieveEditorByEditorId = async (editorId: any) => {
         return await admin.auth().getUser(editorId)
             .then(async (userRecords: any) => {
