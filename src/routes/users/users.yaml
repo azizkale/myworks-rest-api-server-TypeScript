@@ -1,3 +1,17 @@
+openapi: 3.0.0
+info:
+  title: My API
+  version: 1.0.0
+  description: My API description
+security:
+  - bearerAuth: [] # Security scheme name and empty array to indicate no specific scopes required
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
 paths:
   /signin:
     post:
@@ -268,50 +282,33 @@ paths:
                     type: string
                     description: Error message indicating editor not found.
 
+
   /users/addroletouser:
     patch:
-      summary: Add Role to User
-      description: Add a role to a user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: any
-                  description: User's ID.
-                role:
-                  type: string
-                  description: Role to be added to the user.
-              required:
-                - userId
-                - role
+      security:
+        - bearerAuth: []
+      summary: Add role to user
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: The ID of the user to add the role to
+        - in: query
+          name: role
+          schema:
+            type: string
+          required: true
+          description: The role to add to the user
       responses:
         '200':
           description: Role added successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  response:
-                    type: string
-                    description: Response message indicating the role has been added.
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    description: Response status code.
-                  message:
-                    type: string
-                    description: Error message indicating user not found.
+        '400':
+          description: Invalid request
+  
 
   /users/getuserroles:
     get:
