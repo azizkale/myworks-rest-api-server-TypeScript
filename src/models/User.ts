@@ -58,56 +58,54 @@ export class User {
 
     addParticipantToGroup = async (groupId: any, email: any, role: string) => {
         const db = getDatabase();
-
         const newParticipant = {
             role: role,
             email: email,
         }
-        // retrieve group
-        return admin.database().ref(`groups/${groupId}/users/`)
-            .once('value', async (snapshot) => {
-
-                //if there is an user-array already
-                const participants = await snapshot.val();
-                if (!Object.values(participants).includes(newParticipant)) {
-                    const userId = admin.auth().getUserByEmail(email).then(async (userRecords) => {
-                        await set(ref(db, `groups/${groupId}/users/${userRecords.uid}`), {
-                            email: email,
-                            role: role
+        return new Promise<any[]>((resolve, reject) => {
+            // retrieve group
+            admin.database().ref(`groups/${groupId}/users/`)
+                .once('value', async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const participants = snapshot.val();
+                        from(Object.values(participants)).pipe(
+                            map(async (data: any) => {
+                                //checks this email is a already member of this grup. if not, it adds the member
+                                if (data.email !== email) {
+                                    try {
+                                        // if the user is not already a member, add them to the group
+                                        const userRecords = await admin.auth().getUserByEmail(email);
+                                        await set(ref(db, `groups/${groupId}/users/${userRecords.uid}`), {
+                                            email: email,
+                                            role: role
+                                        });
+                                        await addGroupToUser(userRecords.uid, groupId, role);
+                                        return {
+                                            response: {
+                                                email: email,
+                                                role: role
+                                            } + ' added to the group'
+                                        };
+                                    } catch (error) {
+                                        console.error('Error adding participant:', error);
+                                        return { error: error };
+                                    }
+                                } else {
+                                    return { response: 'this user is already member of this group' }
+                                }
+                            })
+                        ).subscribe({
+                            next: (result: any) => {
+                                console.log(result)
+                                return resolve(result)
+                            }
                         })
-                        await addGroupToUser(userRecords.uid, groupId, role)
-                    })
-                } else {
-                    return { response: 'The user exists with the ' + role + ' role' }
-                }
-
-                // controlling if the array has the users already
-                // const isIncluded = arrParticipants?.some((obj) => {
-                //     return obj.email === newParticipant.email && obj.role === newParticipant.role;
-                // });
-
-                // if (isIncluded) {
-                //     return (`${newParticipant} exists in the array `);
-                // } else {
-                //     await arrParticipants.push(newParticipant)
-                //     //adding participant to group
-                //     await set(ref(db, `groups/${groupId}/users/`),
-                //         arrParticipants
-                //     );
-                //     //adding group to user
-                //     await admin.auth().getUserByEmail(email).then((userRecord) => {
-                //         addGroupToUser(userRecord.uid, groupId, role)
-                //     }).catch((error) => {
-                //         return { error: error.message }
-                //     })
-
-
-                //     return await arrParticipants
-                // }
-
-            }, (error) => {
-                return { error: error }
-            });
+                    }
+                }).catch((error) => {
+                    console.error('Error retrieving participants:', error);
+                    return { error: error };
+                });
+        })
 
     }
 
