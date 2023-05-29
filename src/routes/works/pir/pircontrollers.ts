@@ -26,8 +26,8 @@ const createPir = async (req: Request, res: Response) => {
 }
 
 const assingPirToGroup = async (req: Request, res: Response) => {
-    const pir = req.body.pir
-    pirInstance.assignPirToGroup(pir).then((pir) => {
+    const { pirinfo, groupId } = req.body
+    pirInstance.assignPirToGroup(pirinfo, groupId).then((pir) => {
         res.status(200).send({ response: pir + ' added' })
     }).catch((error) => {
         res.status(401).send(

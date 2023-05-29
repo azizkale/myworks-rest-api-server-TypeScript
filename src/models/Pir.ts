@@ -3,7 +3,6 @@ import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
 import { WordPair } from "./WordPair";
 import { Group } from "./Group";
-import { from, map, of, tap } from "rxjs";
 
 const groupInstance = new Group(null, null)
 const db = getDatabase();
@@ -48,35 +47,35 @@ export class Pir {
     }
 
     //this manipulates three nodes in DB
-    async assignPirToGroup(pir: Pir) {
+    async assignPirToGroup(pirinfo: any, groupId: any) {
+        //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
+        await this.addPirToTheNodeInDb(pirinfo.pirId, groupId).then(async () => {
+            await this.addAssignedPirToGroupsWorks(pirinfo, groupId)
+        })
+        // //adds pir to the node 'pir' in db
+        // await set(ref(db, 'pir/' + pir.pirId), {
+        //     pirId: pir.pirId,
+        //     name: pir.name,
+        //     description: pir.description,
+        //     editorId: pir.editorId,
+        //     groupId: pir.groupId
+        // }).then(async () => {
 
-        //adds pir to the node 'pir' in db
-        await set(ref(db, 'pir/' + pir.pirId), {
-            pirId: pir.pirId,
-            name: pir.name,
-            description: pir.description,
-            editorId: pir.editorId,
-            groupId: pir.groupId
-        }).then(async () => {
-            //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
-            await this.addPirToTheNodeInDb(pir).then(async () => {
-                await this.addAssignedPirToGroupsWorks(pir)
-            })
-        }).catch((error) => {
-            console.error("Error updating data:", error);
-            return { errror: error }
-        });
+        // }).catch((error) => {
+        //     console.error("Error updating data:", error);
+        //     return { errror: error }
+        // });
     }
 
     //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db) / is used in assignPirToGroup(pir: Pir)
-    async addPirToTheNodeInDb(pir: Pir) {
-        const reff = admin.database().ref(`pirs/${pir.pirId}`);
+    async addPirToTheNodeInDb(pirId: any, groupId: any) {
+        const reff = admin.database().ref(`pirs/${pirId}`);
         reff.update({
             assigned: true,
-            groupId: pir.groupId
+            groupId: groupId
         })
             .then(() => {
-                return { pir }
+                return { response: 'added succesfully' }
             })
             .catch((error) => {
                 console.error("Error updating data:", error);
@@ -85,10 +84,10 @@ export class Pir {
     }
 
     //add assigned pir to groups works (works/pirs) / / is used in assignPirToGroup(pir: Pir)
-    async addAssignedPirToGroupsWorks(pir: Pir) {
-        const refff = admin.database().ref(`groups/${pir.groupId}/works/pirs/${pir.pirId}`);
+    async addAssignedPirToGroupsWorks(pirinfo: any, groupId: any) {
+        const refff = admin.database().ref(`groups/${groupId}/works/pirs/${pirinfo.pirId}`);
         return refff.update({
-            pirName: pir.name
+            pirName: pirinfo.name
         })
             .then(async () => {
             })
@@ -99,7 +98,7 @@ export class Pir {
     }
 
     async retrievePirByPirid(pirId: any) {
-        const nodeRef = admin.database().ref(`pir/${pirId}`);
+        const nodeRef = admin.database().ref(`pirs/${pirId}`);
         return nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
@@ -113,7 +112,7 @@ export class Pir {
     }
 
     async addChapterToPir(chapter: Chapter) {
-        await set(ref(db, 'pir/' + chapter.pirId + '/chapters/' + chapter.chapterId), {
+        await set(ref(db, 'pirs/' + chapter.pirId + '/chapters/' + chapter.chapterId), {
             chapterName: chapter.chapterName,
             chapterContent: chapter.chapterContent,
             editorId: chapter.editorId,
@@ -125,7 +124,7 @@ export class Pir {
 
     async retrievePirs() {
         // Get a reference to the desired node in the database
-        const nodeRef = admin.database().ref('pir');
+        const nodeRef = admin.database().ref('pirs');
         // Read the data at the node once
         return nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
@@ -253,7 +252,7 @@ export class Pir {
     async leaveThePirFromTheGroup(pir: Pir) {
         const db = admin.database();
         //1- it removed the pir from groups-> works -> pirs
-        const ref = db.ref(`groups/${pir.groupId}/works/pirs/`);
+        const ref = await db.ref(`groups/${pir.groupId}/works/pirs/`);
         await ref.child(pir.pirId).remove().then(() => {
             console.log('removed from the object in the database');
         })
