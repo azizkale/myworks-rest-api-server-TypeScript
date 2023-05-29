@@ -88,7 +88,7 @@ export class WordPair {
     }
 
     async deleteWordPair(wordPair: WordPair) {
-        const ref = await admin.database().ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/');
+        const ref = await admin.database().ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/');
         return await ref.child(wordPair.wordPairId).remove();
 
     }
