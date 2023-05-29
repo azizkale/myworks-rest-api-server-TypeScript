@@ -16,4 +16,5 @@ router.get('/users/retrieveuserbyemail', tokenControl, usercontroller.retrieveUs
 router.patch('/users/addroletouser', usercontroller.addRoleToUser)
 router.patch('/users/addparticipant', tokenControl, usercontroller.addPArticipantToGroup)
 router.get('/users/getuserroles', tokenControl, usercontroller.getUserRoles)
+router.get('/users/retrieveallusersofthegroup', tokenControl, usercontroller.retrieveAllUsersOfTheGroup)
 export default router

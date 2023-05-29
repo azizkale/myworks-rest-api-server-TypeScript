@@ -120,5 +120,14 @@ const getUserRoles = async (req: Request, res: Response) => {
         res.status(404).send({ error: error.message })
     })
 }
+const retrieveAllUsersOfTheGroup = async (req: Request, res: Response) => {
+    const groupId: any = req.query.groupId
+    instanceUser.retrieveAllUsersOfTheGroup(groupId).then((data) => {
+        console.log(data)
+        res.status(200).send(data)
+    }).catch((error) => {
+        res.status(404).send({ error: error.message })
+    })
+}
 
-export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup, getUserRoles };
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup, getUserRoles, retrieveAllUsersOfTheGroup };

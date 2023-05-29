@@ -3,6 +3,7 @@ import { Book } from "./Book";
 import * as admin from "firebase-admin";
 import { addGroupToUser } from "../functions/addGroupToUser";
 import { getRoles } from "../functions/role_getAll";
+import { catchError, concatMap, from, map, of, tap, toArray } from "rxjs";
 
 export class User {
     userName: string;
@@ -116,5 +117,32 @@ export class User {
         }).catch((error) => {
             return { error: error.messages }
         })
+    }
+
+    async retrieveAllUsersOfTheGroup(groupId: any): Promise<any[]> {
+        const nodeRef = admin.database().ref(`groups/${groupId}/users`);
+        return new Promise<any[]>((resolve, reject) => {
+            nodeRef.once('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    from(Object.values(data)).pipe(
+                        concatMap((data: any) => this.retrieveUserByEmail(data.email).then((userRecord: any) => {
+                            return { displayName: userRecord.displayName, uid: userRecord.uid }
+                        })),
+                        toArray()
+                    ).subscribe({
+                        next: (arrInfo: any[]) => {
+                            return resolve(arrInfo);
+                        }
+                    }
+                    );
+
+                } else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            });
+        });
     }
 }
