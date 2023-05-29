@@ -179,9 +179,10 @@ export class Pir {
         // });
     }
 
-    async updateChapter(chapter: Chapter) {
+    async updateChapter(chapter: Chapter | any) {
         const db = admin.database();
         const ref = db.ref('pirs/' + chapter.pirId + '/chapters/' + chapter.chapterId);
+        delete chapter.selectEditor// removes selectEditor (no need)
         return ref.update(chapter)
             .then(() => {
                 return { chapter }

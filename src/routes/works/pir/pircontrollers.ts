@@ -144,64 +144,31 @@ const deletePir = async (req: Request, res: Response) => {
 
 const retrieveAllWordPairsOfSinglePir = async (req: Request, res: Response) => {
     const pirId = req.query.pirId;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        const nodeRef = admin.database().ref('pir/' + pirId + '/chapters');
-        // Read the data at the node once
-        await nodeRef.once('value', async (snapshot) => {
-            if (snapshot.exists()) {
-                const chapters = snapshot.val();
-                let wordpairs: any[] = []
-                await Object.values(chapters).map((data: any) => {
-                    if (data.wordPairs) {
-                        Object.values(data.wordPairs).map((wp: WordPair) => {
-                            wordpairs.push(wp)
-                        })
-                    }
-                })
-                await res.send(wordpairs)
-            } else {
-                return null
-            }
-        }, (error) => {
-            return { error: error }
-        });
-
-    }).catch((err) => {
-        console.log(err)
+    wordPairInstance.retrieveAllWordPairsOfSinglePir(pirId).then((data: any) => {
+        res.status(200).send(data)
+    }).catch((error) => {
+        return res.status(401).send({ error: error.message });
     })
 }
 
 const deleteChapter = async (req: Request, res: Response) => {
     const pirId = req.body.pirId;
     const chapterId = req.body.chapterId;
-    console.log(pirId, chapterId)
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        pirInstance.deleteChapter(pirId, chapterId).then(() => {
-            return res.status(200).send(
-                { info: 'the chapter at' + pirId + 'id! deleted' }
-            );
-        })
-
-    }).catch((err) => {
-        console.log(err)
+    pirInstance.deleteChapter(pirId, chapterId).then(() => {
+        return res.status(200).send(
+            { info: 'the chapter at' + pirId + 'id! deleted' }
+        );
     })
+
 }
 
 const deleteWordPair = async (req: Request, res: Response) => {
     const wordPair = req.body.wordPair;
     console.log(wordPair)
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        wordPairInstance.deleteWordPair(wordPair).then((ress) => {
-            return res.status(200).send(
-                { info: wordPair.word + ' deleted' }
-            );
-        })
-
-    }).catch((err) => {
-        console.log(err)
+    wordPairInstance.deleteWordPair(wordPair).then((ress) => {
+        return res.status(200).send(
+            { info: wordPair.word + ' deleted' }
+        );
     })
 }
 

@@ -1,5 +1,8 @@
 import { getDatabase, ref, set } from "firebase/database";
 import * as admin from "firebase-admin";
+import { catchError, concatMap, filter, from, map, mergeMap, tap, throwError, toArray } from "rxjs";
+import { Group } from "./Group";
+import { Chapter } from "./Chapter";
 
 export class WordPair {
     wordPairId: any;
@@ -19,12 +22,60 @@ export class WordPair {
 
     async createWordPair(wordPair: WordPair) {
         const db = getDatabase();
-        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
+        await set(ref(db, 'pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
     }
+
+    async retrieveAllWordPairsOfSinglePir(pirId: any): Promise<any[]> {
+        return new Promise<any[]>((resolve, reject) => {
+            const nodeRef = admin.database().ref('pirs/' + pirId + '/chapters');
+            // Read the data at the node once
+            nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const chapters = snapshot.val();
+                    return from(Object.values(chapters)).pipe(
+                        filter((chapter: any) => chapter.wordPairs), // Filter out chapters without wordPairs
+                        mergeMap((chapter: any) => Object.values(chapter.wordPairs)), // Merge all wordPairs into a single stream
+                        toArray() // Collect the wordPairs into an array
+                    ).subscribe({
+                        next: ((arrWordPairs: WordPair[]) => {
+                            return resolve(arrWordPairs)
+                        })
+                    })
+                }
+            })
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+        //         let wordpairs: any[] = []
+        //         return await Object.values(chapters).map((data: any) => {
+        //             if (data.wordPairs) {
+        //                 Object.values(data.wordPairs).map((wp: WordPair) => {
+        //                     wordpairs.push(wp)
+        //                 })
+        //             }
+        //         })
+        //     } else {
+        //         return null
+        //     }
+        // }, (error) => {
+        //     return { error: error }
+        // });
+    }
+
 
     async updateWordPair(wordPair: WordPair) {
         const db = admin.database();
-        const ref = db.ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
+        const ref = db.ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
 
         return ref.update(wordPair)
             .then((ress) => {
