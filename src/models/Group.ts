@@ -3,11 +3,13 @@ import { getDatabase, ref, set } from "firebase/database";
 import { User } from "./User";
 import { Roles } from "./Roles";
 import { addGroupToUser } from "../functions/addGroupToUser";
-import { concatMap, filter, from, map, toArray } from "rxjs";
-import { deleteGroupFromUsers } from "../functions/deleteGroupFromUser";
+import { concatMap, filter, from, map, tap, toArray } from "rxjs";
 import { cuz } from "./cuz";
+import { Pir } from './Pir'
+import { deleteGroupFromUsers } from "../functions/deleteGroupFromUser";
 
 const db = getDatabase();
+
 
 export class Group {
     mentorId: any;
@@ -75,18 +77,44 @@ export class Group {
             });
     }
 
-    async deleteGroup(groupId: any) {
+    async deleteGroup(groupId: any): Promise<any[]> {
+        const pirInstance = new Pir(null, null, null, null, null, [], [])
+
         //at first deleted the node 'assigned' of all pir of this group on pirlist
+        return new Promise<any[]>((resolve, reject) => {
+            const nodeRef = admin.database().ref(`groups/${groupId}/works/pirs`);
+            nodeRef.once('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    return from(Object.keys(data)).pipe(
 
+                        concatMap(async (pirId: any) => {
+                            const ref = await admin.database().ref(`pirs/${pirId}`);
+                            ref.update({ assigned: false }).then(async () => {
+                                //removes the group from users at first
+                                await deleteGroupFromUsers(groupId).then(async (data) => {
+                                    //then deletes group from the node 'groups'
+                                    const ref = await admin.database().ref('groups/');
+                                    return await ref.child(groupId).remove();
+                                })
+                            }).catch((error) => {
+                                console.error('Error updating node:', error);
+                            });
+                        }),
+                        toArray()
+                    ).subscribe({
+                        next: () => {
+                            return null
+                        }
+                    })
+                } else {
+                    return { response: 'no data exists' };
+                }
 
-
-        //removes the group from users at first
-        await deleteGroupFromUsers(groupId).then(async (data) => {
-            //then deletes group from the node 'groups'
-            const ref = await admin.database().ref('groups/');
-            return await ref.child(groupId).remove();
+            }, (error) => {
+                return { error: error }
+            });
         })
-
     }
 
     async retrieveAllGroupsOfTheUserByuserId(userId: any): Promise<any[]> {
