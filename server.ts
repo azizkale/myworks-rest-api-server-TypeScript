@@ -25,7 +25,10 @@ const corsOptions = {
     "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
     "https://mywebsite-3f527.web.app/",
-    "http://192.168.0.17:4200"
+    "http://192.168.0.17:4200",
+    "http://10.18.42.197:4200",
+    "http://255.255.240.0:4200",
+    "http://10.18.47.254:4200"
   ],
   default: "http://localhost:4200",
   optionsSuccessStatus: 200

@@ -37,12 +37,12 @@ const assingPirToGroup = async (req: Request, res: Response) => {
 
 }
 
-const retrievePirs = async (req: Request, res: Response) => {
-    const pirEditorId = req.query.pirEditorId;
-    pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
-        return res.status(200).send(pirs)
-    })
-}
+// const retrievePirs = async (req: Request, res: Response) => {
+//     const pirEditorId = req.query.pirEditorId;
+//     pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
+//         return res.status(200).send(pirs)
+//     })
+// }
 
 const createChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
@@ -172,7 +172,7 @@ const deleteWordPair = async (req: Request, res: Response) => {
     })
 }
 
-const retrievePirListToCreateNewPirToEdit = async (req: Request, res: Response) => {
+const retrievePirList = async (req: Request, res: Response) => {
     pirInstance.retrievePirList().then((data) => {
         res.status(200).send(data)
     }).catch((error) => {
@@ -197,4 +197,4 @@ const leaveThePirFromTheGroup = async (req: Request, res: Response) => {
         res.status(200).send({ error: error.message })
     })
 }
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup, retrievePirByPirId, leaveThePirFromTheGroup }
+export default { createPir, createChapter, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirList, assingPirToGroup, retrievePirByPirId, leaveThePirFromTheGroup }

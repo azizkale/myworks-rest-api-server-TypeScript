@@ -76,6 +76,10 @@ export class Group {
     }
 
     async deleteGroup(groupId: any) {
+        //at first deleted the node 'assigned' of all pir of this group on pirlist
+
+
+
         //removes the group from users at first
         await deleteGroupFromUsers(groupId).then(async (data) => {
             //then deletes group from the node 'groups'

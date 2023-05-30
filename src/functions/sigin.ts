@@ -6,7 +6,6 @@ import * as admin from "firebase-admin";
 const auth = getAuth(firebaseApp);
 const signin = async (req: Request, res: Response) => {
     const { email, password } = await req.body;
-
     await signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
             // Signed in 

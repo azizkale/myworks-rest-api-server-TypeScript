@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 router.post('/pir/create', tokenControl, pircontrollers.createPir);
-router.get('/pir/getpirs', tokenControl, pircontrollers.retrievePirs)
+// router.get('/pir/getpirs', tokenControl, pircontrollers.retrievePirs)
 router.patch('/pir/updatepir', tokenControl, pircontrollers.updatePir)
 router.delete('/pir/deletepir', tokenControl, pircontrollers.deletePir)
 
@@ -23,7 +23,7 @@ router.patch('/pir/updatewordpair', tokenControl, pircontrollers.updateWordPair)
 router.get('/pir/getallwordpairsofsinglepir', tokenControl, pircontrollers.retrieveAllWordPairsOfSinglePir)
 router.delete('/pir/deletewordpair', tokenControl, pircontrollers.deleteWordPair)
 
-router.get('/pir/retrievepirlist', tokenControl, pircontrollers.retrievePirListToCreateNewPirToEdit)
+router.get('/pir/retrievepirlist', tokenControl, pircontrollers.retrievePirList)
 router.post('/pir/assignpirtogroup', tokenControl, pircontrollers.assingPirToGroup)
 router.get('/pir/retrievepirbypirid', tokenControl, pircontrollers.retrievePirByPirId)
 router.patch('/pir/leavepirfromgroup', tokenControl, pircontrollers.leaveThePirFromTheGroup)
