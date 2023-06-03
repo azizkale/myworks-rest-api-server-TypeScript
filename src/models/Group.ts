@@ -39,8 +39,9 @@ export class Group {
 
         await set(ref(db, `groups/${groupId}/users/${mentorId}`), {
             email: mentorEmail,
-            role: Roles[2]
+            roles: [Roles[2]]
         })
+
         //add the group to the user (here the userId is mentorId)
         addGroupToUser(mentorId, groupId, Roles[2])
 

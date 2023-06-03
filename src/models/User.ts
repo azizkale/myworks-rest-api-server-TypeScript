@@ -117,7 +117,8 @@ export class User {
         })
     }
 
-    async retrieveAllUsersOfTheGroup(groupId: any): Promise<any[]> {
+    //fullfilling the select tag on FormGroup to create new chapter
+    retrieveAllUsersOfTheGroup = async (groupId: any): Promise<any[]> => {
         const nodeRef = admin.database().ref(`groups/${groupId}/users`);
         return new Promise<any[]>((resolve, reject) => {
             nodeRef.once('value', async (snapshot) => {
@@ -141,6 +142,26 @@ export class User {
             }, (error) => {
                 return { error: error };
             });
+        });
+    }
+    //to role controll on the client-side
+    retrieveSingleUserRolesOfTheGroup = async (groupId: any, userId: any) => {
+        const nodeRef = admin.database().ref(`groups/${groupId}/users/${userId}`);
+        return new Promise<any[]>((resolve, reject) => {
+            from(nodeRef.once('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    return data
+                } else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            })).subscribe({
+                next: ((data: any) => {
+                    return resolve(data.val().roles)
+                })
+            })
         });
     }
 }

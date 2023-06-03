@@ -17,4 +17,5 @@ router.patch('/users/addroletouser', usercontroller.addRoleToUser)
 router.patch('/users/addparticipant', tokenControl, usercontroller.addPArticipantToGroup)
 router.get('/users/getuserroles', tokenControl, usercontroller.getUserRoles)
 router.get('/users/retrieveallusersofthegroup', tokenControl, usercontroller.retrieveAllUsersOfTheGroup)
+router.get('/users/getuserrolesofthegroup', tokenControl, usercontroller.retrieveSingleUserRolesOfTheGroup)
 export default router
