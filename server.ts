@@ -15,7 +15,6 @@ import generalroutes from './src/routes/general/generalroutes'
 import grouprotes from './src/routes/group/grouproutes'
 import displayroutes from './src/routes/displays/pir/pirroutes'
 import { removeRole } from './src/functions/role_remove';
-import { addRole } from './src/functions/role_add';
 
 const port = process.env.PORT || 3000;
 
@@ -76,15 +75,6 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get("/checkuser", (req, res) => {
   checkUser("azizkale@hotmail.com");
-});
-
-app.get("/checkrole", (req, res) => {
-
-});
-
-app.get("/addrole", (req, res) => {
-  const { uid, role } = req.query
-  addRole(uid, role);
 });
 
 app.get("/removerole", (req, res) => {

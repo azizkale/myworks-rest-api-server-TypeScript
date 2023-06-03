@@ -4,6 +4,7 @@ import * as admin from "firebase-admin";
 import { addGroupToUser } from "../functions/addGroupToUser";
 import { getRoles } from "../functions/role_getAll";
 import { catchError, concatMap, from, map, of, tap, toArray } from "rxjs";
+import { addRole } from "../functions/role_add";
 
 export class User {
     userName: string;
@@ -58,55 +59,32 @@ export class User {
 
     addParticipantToGroup = async (groupId: any, email: any, role: string) => {
         const db = getDatabase();
-        const newParticipant = {
-            role: role,
-            email: email,
-        }
-        return new Promise<any[]>((resolve, reject) => {
-            // retrieve group
-            admin.database().ref(`groups/${groupId}/users/`)
-                .once('value', async (snapshot) => {
-                    if (snapshot.exists()) {
-                        const participants = snapshot.val();
-                        from(Object.values(participants)).pipe(
-                            map(async (data: any) => {
-                                //checks this email is a already member of this grup. if not, it adds the member
-                                if (data.email !== email) {
-                                    try {
-                                        // if the user is not already a member, add them to the group
-                                        const userRecords = await admin.auth().getUserByEmail(email);
-                                        await set(ref(db, `groups/${groupId}/users/${userRecords.uid}`), {
-                                            email: email,
-                                            role: role
-                                        });
-                                        await addGroupToUser(userRecords.uid, groupId, role);
-                                        return {
-                                            response: {
-                                                email: email,
-                                                role: role
-                                            } + ' added to the group'
-                                        };
-                                    } catch (error) {
-                                        console.error('Error adding participant:', error);
-                                        return { error: error };
-                                    }
-                                } else {
-                                    return { response: 'this user is already member of this group' }
-                                }
-                            })
-                        ).subscribe({
-                            next: (result: any) => {
-                                console.log(result)
-                                return resolve(result)
-                            }
-                        })
-                    }
-                }).catch((error) => {
-                    console.error('Error retrieving participants:', error);
-                    return { error: error };
+        // checking if the user a member
+        const userRecords = await admin.auth().getUserByEmail(email);
+        const nodeRef = admin.database().ref(`groups/${groupId}/users/${userRecords.uid}`);
+        return nodeRef.once('value', async (snapshot) => {
+            //if not, the user is added as a participant
+            if (!snapshot.exists()) {
+                await set(ref(db, `groups/${groupId}/users/${userRecords.uid}`), {
+                    email: email,
+                    roles: [role]
                 });
-        })
-
+                await addGroupToUser(userRecords.uid, groupId, role);
+                return {
+                    response: {
+                        email: email,
+                        role: role
+                    } + ' added to the group'
+                };
+            } else {
+                //if the user already a member of the grup
+                await addRole(userRecords.uid, groupId, role).then(res => {
+                    { console.log(res.val()) }
+                })
+            }
+        }, (error) => {
+            return { error: error }
+        });
     }
 
     getUserRoles = async (uid: any) => {

@@ -36,7 +36,7 @@ export class Group {
             mentorEmail: mentorEmail,
             groupId: groupId,
         });
-
+        //this is the first user(mentor) of this grup. So, at first no need to call roles of the user in this group
         await set(ref(db, `groups/${groupId}/users/${mentorId}`), {
             email: mentorEmail,
             roles: [Roles[2]]
