@@ -196,30 +196,26 @@ export class Group {
 
         if (snapshot.exists()) {
             const groups = snapshot.val();
-
-            for (const obj of Object.values(groups)) {
-                await this.getGroupNameByGroupId(obj['groupId']).then((name) => {
-                    obj['groupName'] = name;
-                })
-            }
-            return await from(Object.values(groups)).pipe(
-                filter((groupinfo: any) => groupinfo.role === Roles[2]),
-                toArray()
-            ).toPromise();
+            return new Promise<any[]>((resolve, reject) => {
+                from(Object.values(groups)).pipe(
+                    filter((groupsinfo: any) => groupsinfo?.roles?.includes(Roles[2])),
+                    concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
+                    map((group: Group | any) => ({
+                        groupId: group.val().groupId,
+                        groupName: group.val().groupName
+                    })),
+                    toArray()
+                ).subscribe({
+                    next: (groups: any[]) => {
+                        resolve(groups);
+                    },
+                    error: (error) => {
+                        reject(error);
+                    }
+                });
+            });
         } else {
             return [];
-        }
-
-    }
-    async getGroupNameByGroupId(groupId: any) {
-        const nodeRef = admin.database().ref(`groups/${groupId}`);
-        const snapshot = await nodeRef.once('value');
-        if (snapshot.exists()) {
-            const group = snapshot.val();
-            //filtering groups according mentors role
-            return group.groupName
-        } else {
-            return ''
         }
     }
 }
