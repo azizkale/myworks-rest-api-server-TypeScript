@@ -85,6 +85,7 @@ export class Group {
         return new Promise<any[]>((resolve, reject) => {
             const nodeRef = admin.database().ref(`groups/${groupId}/works/pirs`);
             nodeRef.once('value', async (snapshot) => {
+                //if group has pir to edit
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     return from(Object.keys(data)).pipe(
@@ -108,8 +109,14 @@ export class Group {
                             return null
                         }
                     })
+                    //if group has no pir to edit
                 } else {
-                    return { response: 'no data exists' };
+                    //removes the group from users at first
+                    await deleteGroupFromUsers(groupId).then(async (data) => {
+                        //then deletes group from the node 'groups'
+                        const ref = await admin.database().ref('groups/');
+                        return await ref.child(groupId).remove();
+                    })
                 }
 
             }, (error) => {
@@ -198,9 +205,11 @@ export class Group {
             const groups = snapshot.val();
             return new Promise<any[]>((resolve, reject) => {
                 from(Object.values(groups)).pipe(
+                    // gets groups in that the user is mentor
                     filter((groupsinfo: any) => groupsinfo?.roles?.includes(Roles[2])),
                     concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
                     map((group: Group | any) => ({
+                        //returns only groupId and its names
                         groupId: group.val().groupId,
                         groupName: group.val().groupName
                     })),

@@ -137,7 +137,7 @@ export class User {
                 return { error: error };
             })).subscribe({
                 next: ((data: any) => {
-                    return resolve(data.val().roles)
+                    return resolve(data.val()?.roles)
                 })
             })
         });
