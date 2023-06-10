@@ -133,18 +133,15 @@ export class Group {
                 from(Object.values(listGroups)).pipe(
                     concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
                     map((group: Group | any) => ({
-                        groupId: group.val().groupId,
-                        groupName: group.val().groupName
+                        groupId: group.val()?.groupId,
+                        groupName: group.val()?.groupName
                     })),
                     toArray()
-                ).subscribe(
-                    {
-                        next: (groupData: any[]) => {
-                            return resolve(groupData); // Resolve the Promise with the groupData
-                        }
-
+                ).subscribe({
+                    next: (groupData: any[]) => {
+                        return resolve(groupData); // Resolve the Promise with the groupData
                     }
-                );
+                });
             }).catch((error) => {
                 return reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
             });
@@ -173,6 +170,7 @@ export class Group {
         // getting IDs and roles of all groups of the user
         const nodeRef = admin.database().ref(`users/${userId}/groups`);
         return nodeRef.once('value', async (snapshot) => {
+            return snapshot.val()
         }, (error) => {
             return { error: error }
         });

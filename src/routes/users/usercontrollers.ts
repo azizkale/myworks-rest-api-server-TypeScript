@@ -83,10 +83,8 @@ const retrieveEditorbyEditorId = async (req: Request, res: Response) => {
 }
 
 const addRoleToUser = async (req: Request, res: Response) => {
-    const uid: string | any = req.body.uid;
-    const role = req.body.role;
-
-    instanceUser.addRoleToUser(uid, role).then((result: any) => {
+    const { uid, role, groupId } = req.body;
+    instanceUser.addRoleToUser(uid, role, groupId).then((result: any) => {
         res.status(200).send(result)
     }).catch((error: any) => {
         res.status(401).send(error)

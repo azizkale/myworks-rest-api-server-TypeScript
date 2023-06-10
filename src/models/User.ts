@@ -32,21 +32,10 @@ export class User {
             })
     }
 
-    addRoleToUser = async (userId: any, role: string) => {
-        await admin.auth().getUser(userId).then(async (userRecord) => {
-            if (userRecord.customClaims.roles.includes(role)) {
-                console.log('this user is already a ' + role)
-                return { response: 'this user is already a ' + role }
-            }
-            else {
-                // adds role to users
-                const uid = userRecord.uid;
-                const arr = userRecord.customClaims.roles;
-                await arr.push(role);
-                await admin.auth().setCustomUserClaims(uid, { roles: arr })
-                return { response: arr }
-            }
-        });
+    addRoleToUser = async (userId: any, role: string, groupId: any) => {
+        await addRole(userId, groupId, role).then(result => {
+            { return result }
+        })
     }
 
     retrieveUserByEmail = async (email: any) => {
@@ -79,7 +68,7 @@ export class User {
             } else {
                 //if the user already a member of the grup
                 await addRole(userRecords.uid, groupId, role).then(res => {
-                    { console.log(res.val()) }
+                    { }
                 })
             }
         }, (error) => {
