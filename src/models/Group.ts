@@ -41,7 +41,6 @@ export class Group {
             email: mentorEmail,
             roles: [Roles[2]]
         })
-
         //add the group to the user (here the userId is mentorId)
         addGroupToUser(mentorId, groupId, Roles[2])
 
@@ -129,7 +128,6 @@ export class Group {
         return new Promise<any[]>((resolve, reject) => {
             this.getUsersAllGroupsAndRoles(userId).then((info) => {
                 const listGroups = info.val();
-
                 from(Object.values(listGroups)).pipe(
                     concatMap((data: any) => this.retrieveSingleGroupByGroupId(data.groupId)),
                     map((group: Group | any) => ({
