@@ -3,9 +3,7 @@ import { getDatabase, ref, set } from "firebase/database";
 
 export const addRole = (userId: any, groupId: any, role: string) => {
     const db = getDatabase();//to update
-    const db_ = admin.database(); // to create
     const nodeRef = admin.database().ref(`users/${userId}/groups/${groupId}`);
-
     return nodeRef.once('value', async (snapshot) => {
         //it is checked that the new role is already added to the user'
         const roles = await snapshot.val()?.roles;
@@ -15,9 +13,15 @@ export const addRole = (userId: any, groupId: any, role: string) => {
         if (!bool) {
             roles?.push(role)
             //add role to the user in the node "group"
-            // await db_.ref(`groups/${groupId}/users/${userId}`)?.update({ roles: roles })
-            //add role to the user in the node "users"
-            await set(ref(db, `groups/${groupId}/users/${userId}`), { roles: roles });
+            await admin.auth()?.getUser(userId)?.then(async (userRecords) => {
+                await set(ref(db, `groups/${groupId}/users/${userId}`), {
+                    email: userRecords.email,
+                    roles: roles
+                });
+            }).catch((error) => {
+                return { response: error.message }
+            })
+
             //add role to the user in the node "users"
             await set(ref(db, `users/${userId}/groups/${groupId}`), {
                 groupId: groupId,

@@ -86,16 +86,11 @@ const retrieveAllChapters = async (req: Request, res: Response) => {
 
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        const db = admin.database();
-        pirInstance.updateChapter(chapter).then((updatedChapter) => {
-            return res.status(200).send(updatedChapter)
-        })
-
-    }).catch((err) => {
-        console.log(err)
+    pirInstance.updateChapter(chapter).then((updatedChapter) => {
+        return res.status(200).send(updatedChapter)
     })
+
+
 }
 
 const updatePir = async (req: Request, res: Response) => {

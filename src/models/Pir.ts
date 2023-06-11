@@ -52,19 +52,6 @@ export class Pir {
         await this.addPirToTheNodeInDb(pirinfo.pirId, groupId).then(async () => {
             await this.addAssignedPirToGroupsWorks(pirinfo, groupId)
         })
-        // //adds pir to the node 'pir' in db
-        // await set(ref(db, 'pir/' + pir.pirId), {
-        //     pirId: pir.pirId,
-        //     name: pir.name,
-        //     description: pir.description,
-        //     editorId: pir.editorId,
-        //     groupId: pir.groupId
-        // }).then(async () => {
-
-        // }).catch((error) => {
-        //     console.error("Error updating data:", error);
-        //     return { errror: error }
-        // });
     }
 
     //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db) / is used in assignPirToGroup(pir: Pir)
@@ -160,25 +147,6 @@ export class Pir {
             return null;
         }
     }
-
-    // async retrievePirsByPirEditorId(pirEditorId: any) {
-    //     // Get a reference to the desired node in the database
-    //     // const nodeRef = admin.database().ref('pir');
-    //     // // Read the data at the node once
-    //     // return nodeRef.once('value', (snapshot) => {
-    //     //     if (snapshot.exists()) {
-    //     //         // access the data from the snapshot if it exists
-    //     //         const data = snapshot.val();
-    //     //         const editorsPirs = (Object.values(data)).filter((pir: Pir) => pir.pirId.editorId === pirEditorId)
-    //     //         return editorsPirs
-
-    //     //     } else {
-    //     //         return null
-    //     //     }
-    //     // }, (error) => {
-    //     //     return { error: error }
-    //     // });
-    // }
 
     async updateChapter(chapter: Chapter | any) {
         const db = admin.database();
