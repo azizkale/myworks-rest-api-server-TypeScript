@@ -225,4 +225,31 @@ export class Group {
             return [];
         }
     }
+
+    async deleteParticipantFromGroup(groupId: any, email: any) {
+        //gets users id
+        admin.auth().getUserByEmail(email).then((userRecords) => {
+            //deletes user from the group
+            const userId = userRecords.uid;
+            const nodeRef = admin.database().ref(`groups/${groupId}/users`);
+            nodeRef.once('value', async (snapshot) => {
+                if (snapshot.exists()) {
+                    await nodeRef.child(userId).remove();
+
+                    //deletes group from the user
+                    const nodeRef2 = admin.database().ref(`users/${userId}/groups/`);
+                    await nodeRef2.once('value', async (snapshot) => {
+                        if (snapshot.exists()) {
+                            await nodeRef2.child(groupId).remove();
+                        }
+                    })
+                    return await { result: 'user deleted successfully' }
+                }
+                else
+                    return await { result: 'user cannot be deleted' }
+            })
+        })
+
+
+    }
 }

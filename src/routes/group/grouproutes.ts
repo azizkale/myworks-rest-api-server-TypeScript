@@ -14,5 +14,6 @@ router.get('/group/retrieveallgroupsnamesoftheuserbyuserid', [tokenControl], gro
 router.get('/group/retrievesinglegroupofuserbygroupid', [tokenControl], groupcontrollers.retrieveSingleGroupOfUserByGroupId)
 router.get('/group/retrieveallparticipantsofthegroupbygroupid', tokenControl, groupcontrollers.retrieveAllParticipantsOfThegroupByGroupId)
 router.get('/group/retrieveallgroupsofthementor', tokenControl, groupcontrollers.retrieveAllGroupsOfTheMentor)
+router.delete('/group/deleteparticipantfromgroup', tokenControl, groupcontrollers.deleteParticipantFromGroup)
 
 export default router;
