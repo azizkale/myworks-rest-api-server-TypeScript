@@ -55,7 +55,6 @@ const getUserById = async (req: Request, res: Response) => {
 }
 
 const retrieveAllUsers = async (req: Request, res: Response) => {
-
     let users: any[] = []
     await admin.auth().listUsers()
         .then(async (userRecords: any) => {
@@ -82,15 +81,15 @@ const retrieveEditorbyEditorId = async (req: Request, res: Response) => {
     })
 }
 
-// const addRoleToUser = async (req: Request, res: Response) => {
-//     const { uid, role, groupId } = req.body;
-//     instanceUser.addRoleToUser(uid, role, groupId).then((result: any) => {
-//         res.status(200).send(result)
-//     }).catch((error: any) => {
-//         res.status(401).send(error)
-//     })
+const addRoleToUser = async (req: Request, res: Response) => {
+    const { uid, role, groupId } = req.body;
+    instanceUser.addRoleToUser(uid, role, groupId).then((result: any) => {
+        res.status(200).send(result)
+    }).catch((error: any) => {
+        res.status(401).send(error)
+    })
 
-// }
+}
 
 const retrieveUserByEmail = async (req: Request, res: Response) => {
     const email: any = req.query.email
@@ -126,6 +125,7 @@ const retrieveAllUsersOfTheGroup = async (req: Request, res: Response) => {
         res.status(404).send({ error: error.message })
     })
 }
+
 const retrieveSingleUserRolesOfTheGroup = async (req: Request, res: Response) => {
     const { groupId, userId } = req.query
 
@@ -136,4 +136,4 @@ const retrieveSingleUserRolesOfTheGroup = async (req: Request, res: Response) =>
     })
 }
 
-export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, retrieveUserByEmail, addPArticipantToGroup, getUserRoles, retrieveAllUsersOfTheGroup, retrieveSingleUserRolesOfTheGroup };
+export default { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, retrieveUserByEmail, addPArticipantToGroup, getUserRoles, retrieveAllUsersOfTheGroup, retrieveSingleUserRolesOfTheGroup, addRoleToUser };

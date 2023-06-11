@@ -230,7 +230,7 @@ export class Group {
             //deletes user from the group
             const userId = userRecords.uid;
             const nodeRef = admin.database().ref(`groups/${groupId}/users`);
-            nodeRef.once('value', async (snapshot) => {
+            return nodeRef.once('value', async (snapshot) => {
                 if (snapshot.exists()) {
                     await nodeRef.child(userId).remove();
 

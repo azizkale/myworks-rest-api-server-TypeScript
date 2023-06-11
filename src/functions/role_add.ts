@@ -5,7 +5,6 @@ export const addRole = (userId: any, groupId: any, role: string) => {
     const db = getDatabase();//to update
     const db_ = admin.database(); // to create
     const nodeRef = admin.database().ref(`users/${userId}/groups/${groupId}`);
-    console.log(userId, groupId.role)
 
     return nodeRef.once('value', async (snapshot) => {
         //it is checked that the new role is already added to the user'
@@ -20,7 +19,10 @@ export const addRole = (userId: any, groupId: any, role: string) => {
             //add role to the user in the node "users"
             await set(ref(db, `groups/${groupId}/users/${userId}`), { roles: roles });
             //add role to the user in the node "users"
-            await set(ref(db, `users/${userId}/groups/${groupId}`), { roles: roles });
+            await set(ref(db, `users/${userId}/groups/${groupId}`), {
+                groupId: groupId,
+                roles: roles
+            });
         } else {
             //if user already has the role
             return { response: 'the user is already a ' + role }
