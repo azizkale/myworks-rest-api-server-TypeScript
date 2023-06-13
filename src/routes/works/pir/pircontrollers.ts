@@ -159,7 +159,6 @@ const deleteChapter = async (req: Request, res: Response) => {
 
 const deleteWordPair = async (req: Request, res: Response) => {
     const wordPair = req.body.wordPair;
-    console.log(wordPair)
     wordPairInstance.deleteWordPair(wordPair).then((ress) => {
         return res.status(200).send(
             { info: wordPair.word + ' deleted' }
