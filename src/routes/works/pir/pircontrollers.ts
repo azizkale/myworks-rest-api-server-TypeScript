@@ -102,16 +102,9 @@ const updatePir = async (req: Request, res: Response) => {
 
 const createWordPair = async (req: Request, res: Response) => {
     const wordpair: WordPair = req.body.wordpair;
-    wordpair.wordPairId = uuidv1();
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        await wordPairInstance.createWordPair(wordpair)
-        return res.status(200).send(wordpair)
-    }).catch((err) => {
-        return res.status(401).send(
-            { error: err.message }
-        );
-    })
+    await wordPairInstance.createWordPair(wordpair)
+    return res.status(200).send(wordpair)
+
 }
 
 const updateWordPair = async (req: Request, res: Response) => {
