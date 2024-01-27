@@ -13,13 +13,11 @@ const db = getDatabase();
 
 export class Group {
     mentorId: any;
-    users: [User]
+    users: User[] = []
     groupName: any;
     groupId: any;
-    works: {
-        hatim: cuz[],
-        pirs: any[]// just pirIds
-    }
+    public works: { hatim: cuz[]; pirs: any[] } = { hatim: [], pirs: [] }
+
 
     constructor(groupName: any, mentorId: any) {
         this.groupName = groupName,
@@ -78,7 +76,7 @@ export class Group {
     }
 
     async deleteGroup(groupId: any): Promise<any[]> {
-        const pirInstance = new Pir(null, null, null, null, null, [], [])
+        const pirInstance = new Pir(null, null, null, null, '', [], [])
 
         //at first deleted the node 'assigned' of all pir of this group on pirlist
         return new Promise<any[]>((resolve, reject) => {

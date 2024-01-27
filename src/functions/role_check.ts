@@ -1,25 +1,28 @@
 import * as admin from "firebase-admin";
 import { NextFunction, Request, Response } from 'express';
 
-export const chechkRole = async (req: Request, res: Response, next: NextFunction) => {
+export const checkRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const idToken = await req.body.token || req.headers['authorization'].split(' ')[1];
-        admin.auth()
-            .verifyIdToken(idToken)
-            .then((decodedToken) => {
-                // Token is valid.   
-                if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
-                    next();
-                else console.log('yetkisiz giris')
-                return decodedToken.roles
-            })
-            .catch((err) => {
-                return res.status(401).send(err.message);
-            });
-    } catch (error) {
-        return res.status(401).send(error.message);
-    }
-    return true
-}
+        const idToken = req.body.token || (req.headers['authorization'] && req.headers['authorization'].split(' ')[1]);
 
-export default chechkRole;
+        if (!idToken) {
+            return res.status(401).send('Unauthorized: No token provided');
+        }
+
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+        if (decodedToken.roles && (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))) {
+            next();
+        } else {
+            console.log('Unauthorized access: Insufficient role');
+            return res.status(403).send('Forbidden: Insufficient role');
+        }
+
+        return decodedToken.roles;
+    } catch (error: any) {
+        console.error('Error verifying token:', error);
+        return res.status(401).send('Unauthorized: ' + error.message);
+    }
+};
+
+export default checkRole;

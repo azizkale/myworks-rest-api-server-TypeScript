@@ -5,7 +5,7 @@ import { Book } from "../../../models/Book";
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 const db = getDatabase();
 
-const createBook = async (req: Request, res: Response) => {
+const createBook = async (req: Request | any, res: Response | any) => {
 
     const book: Book = req.body.book;
     const token = req.headers['authorization'].split(' ')[1];
@@ -22,7 +22,7 @@ const createBook = async (req: Request, res: Response) => {
                 { error: err.message }
             );
         })
-    } catch (err) {
+    } catch (err: any) {
         return res.send(
             { error: err.message }
         );
@@ -30,66 +30,76 @@ const createBook = async (req: Request, res: Response) => {
 
 };
 const retrieveAllBooks = async (req: Request, res: Response) => {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
 
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        // Get a reference to the desired node in the database
+        if (!token) {
+            return res.status(401).send({ error: 'Unauthorized: Missing Authorization Header' });
+        }
+
+        const response = await admin.auth().verifyIdToken(token);
         const nodeRef = admin.database().ref('users/' + response.uid + '/works/books/');
 
-        // Read the data at the node once
-        nodeRef.once('value', (snapshot) => {
-            if (snapshot.exists()) {
-                // access the data from the snapshot if it wxists
-                const data = snapshot.val();
-                return res.status(200).send(Object.values(data));
-            } else {
-                // handle the case where the node doesn't exist or is null
-            }
-
-        }, (error) => {
-            return res.status(404).send(error);
-        });
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+        const snapshot = await nodeRef.once('value');
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            return res.status(200).send(Object.values(data));
+        } else {
+            // Handle the case where the node doesn't exist or is null
+            return res.status(404).send({ error: 'Node not found or is null' });
+        }
+    } catch (err) {
+        console.error("Error retrieving books:", err);
+        return res.status(500).send({ error: 'Internal Server Error' });
+    }
 }
+
 const deleteBook = async (req: Request, res: Response) => {
-    const bookId = req.body.bookId;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
+    try {
+        const bookId = req.body.bookId;
+        const authorizationHeader = req.headers && req.headers['authorization'];
 
-        const ref = await admin.database().ref('users/' + response.uid + '/works/books/');
+        if (!authorizationHeader) {
+            // Handle the case where the 'authorization' header is missing
+            return res.status(401).send({ error: 'Unauthorized: Missing Authorization Header' });
+        }
 
+        const token = authorizationHeader.split(' ')[1];
+
+        const response = await admin.auth().verifyIdToken(token);
+
+        const ref = admin.database().ref('users/' + response.uid + '/works/books/');
         await ref.child(bookId).remove();
 
-        return await res.send(
-            { info: 'the book at' + bookId + 'id!' }
-        );
-    }).catch((err) => {
-        console.log(err)
-    })
+        res.send({ info: 'The book at ' + bookId + ' id has been deleted!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
 }
+
 const updateBook = async (req: Request, res: Response) => {
-    const book = req.body.book;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
+    try {
+        const book = req.body.book;
+        const authorizationHeader = req.headers && req.headers['authorization'];
+
+        if (!authorizationHeader) {
+            // Handle the case where the 'authorization' header is missing
+            return res.status(401).send({ error: 'Unauthorized: Missing Authorization Header' });
+        }
+
+        const token = authorizationHeader.split(' ')[1];
+        const response = await admin.auth().verifyIdToken(token);
+
         const db = admin.database();
         const ref = db.ref('users/' + response.uid + '/works/books/' + book.bookId);
 
-        return ref.update(book)
-            .then(async () => {
-                return await res.send(
-                    { book: book }
-                );
-            })
-            .catch((error) => {
-                console.error("Error updating data:", error);
-            });
-
-
-    }).catch((err) => {
-        console.log(err)
-    })
+        await ref.update(book);
+        res.send({ book: book });
+    } catch (err) {
+        console.error("Error updating data:", err);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
 }
 
 export default { createBook, retrieveAllBooks, deleteBook, updateBook };

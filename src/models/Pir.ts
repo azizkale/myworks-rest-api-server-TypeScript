@@ -12,7 +12,7 @@ export class Pir {
     editorId: any;
     name: string | any;
     description: string;
-    assigned: boolean;
+    assigned: boolean | any;
     chapters: Chapter[];
     wordPairs: WordPair[];
     groupId: any // which group edits the pir

@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import { Request, Response } from 'express';
 import { User } from "../../models/User";
 
-const instanceUser = new User(null, null, null, null)
+const instanceUser = new User('', '', '', 0)
 const createUser = async (req: Request, res: Response) => {
     const { email, password } = await req.body;
 
@@ -58,7 +58,7 @@ const retrieveAllUsers = async (req: Request, res: Response) => {
     let users: any[] = []
     await admin.auth().listUsers()
         .then(async (userRecords: any) => {
-            userRecords.users.map((userInfo) => {
+            userRecords.users.map((userInfo: any) => {
                 let user = {
                     displayName: userInfo.displayName,
                     uid: userInfo.uid

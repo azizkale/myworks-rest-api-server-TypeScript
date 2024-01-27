@@ -7,7 +7,7 @@ initializeApp({
   databaseURL: "https://mywebsite-3f527-default-rtdb.firebaseio.com",
 });
 
-export const checkUser = async (email) => {
+export const checkUser = async (email: any) => {
   const user = await admin.auth().getUserByEmail(email).then((userRecord) => {
     console.log(userRecord)
   }).catch((error) => {

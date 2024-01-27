@@ -5,8 +5,8 @@ import { Chapter } from '../../../models/Chapter';
 import { WordPair } from '../../../models/WordPair';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
-const pirInstance = new Pir(null, null, null, null, null, [], [])
-const wordPairInstance = new WordPair(null, null, null, null, null)
+const pirInstance = new Pir(null, null, null, null, '', [], [])
+const wordPairInstance = new WordPair('', '', null, null, null)
 
 const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
@@ -57,32 +57,48 @@ const createChapter = async (req: Request, res: Response) => {
 }
 
 const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
-    const editorId: any = req.query.editorId;
-    const pirId: any = req.query.pirId;
-    pirInstance.retrievePirs().then((pirs) => {
-        const selectedPir: Pir | any = (Object.values(pirs.val()).filter((pir: Pir) => pir.pirId === pirId))[0]
+    try {
+        const editorId: any = req.query.editorId;
+        const pirId: any = req.query.pirId;
 
-        const chapters = Object.values(
-            selectedPir?.chapters).filter((chapter: Chapter) =>
-                chapter.editorId === editorId
-            )
-        return res.status(200).send(chapters)
+        const pirs = await pirInstance.retrievePirs();
 
-    }).catch((error) => {
+        const selectedPir: Pir | undefined = Object.values<Pir>(pirs.val()).find((pir: Pir) => pir.pirId === pirId);
+
+        if (!selectedPir) {
+            return res.status(404).send({ error: 'Selected pir not found' });
+        }
+
+        const chapters = Object.values<Chapter>(selectedPir.chapters).filter((chapter: Chapter) =>
+            chapter.editorId === editorId
+        );
+
+        return res.status(200).send(chapters);
+    } catch (error: any) {
         return res.status(401).send({ error: error.message });
-    })
-}
+    }
+};
+
+
 
 const retrieveAllChapters = async (req: Request, res: Response) => {
-    const pirId: any = req.query.pirId;
-    pirInstance.retrievePirs().then((pirs) => {
-        const selectedPir: Pir | any = (Object.values(pirs.val()).filter((pir: Pir) => pir.pirId === pirId))[0]
-        return res.status(200).send(selectedPir.chapters)
+    try {
+        const pirId: any = req.query.pirId;
 
-    }).catch((error) => {
-        return res.status(401).send(error.message);
-    })
-}
+        const pirs = await pirInstance.retrievePirs();
+        const selectedPir: Pir | undefined = Object.values<Pir>(pirs.val()).find((pir: Pir) => pir.pirId === pirId);
+
+        if (!selectedPir) {
+            return res.status(404).send({ error: 'Selected pir not found' });
+        }
+
+        const chapters = selectedPir.chapters;
+        return res.status(200).send(chapters);
+    } catch (error: any) {
+        return res.status(401).send({ error: error.message });
+    }
+};
+
 
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
@@ -108,16 +124,25 @@ const createWordPair = async (req: Request, res: Response) => {
 }
 
 const updateWordPair = async (req: Request, res: Response) => {
-    const wordPair: WordPair = req.body.wordPair;
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        wordPairInstance.updateWordPair(wordPair).then((updatedWordPair) => {
-            return res.status(200).send(updatedWordPair)
-        })
-    }).catch((err) => {
-        console.log(err)
-    })
-}
+    try {
+        const wordPair: WordPair = req.body.wordPair;
+        const token = req.headers?.['authorization']?.split(' ')[1]; // Check if headers is defined
+
+        if (!token) {
+            return res.status(401).send({ error: 'Authorization token not provided' });
+        }
+
+        const response = await admin.auth().verifyIdToken(token);
+
+        const updatedWordPair = await wordPairInstance.updateWordPair(wordPair);
+
+        return res.status(200).send(updatedWordPair);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ error: 'Internal server error' });
+    }
+};
+
 
 const deletePir = async (req: Request, res: Response) => {
     const pirId = req.body.pirId;

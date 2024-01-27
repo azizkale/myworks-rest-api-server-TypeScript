@@ -3,8 +3,8 @@ import { cuz } from "./cuz"
 import * as admin from "firebase-admin";
 
 export class Hatim {
-    hatim: cuz[]
-    totalHatim: number
+    hatim: cuz[] = [];
+    totalHatim: number = 0;
 
     createHatim = (groupId: any) => {
         const db = getDatabase();

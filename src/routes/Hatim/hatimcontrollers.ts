@@ -46,33 +46,41 @@ const getSingleCuz = async (req: Request, res: Response) => {
 
 }
 const getReaderName = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        return res.send(response)
-        //
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
 
+        if (!token) {
+            return res.status(401).send({ error: 'Unauthorized: Missing Authorization Header' });
+        }
+
+        const response = await admin.auth().verifyIdToken(token);
+        return res.status(200).send({ readerName: response.displayName, uid: response.uid });
+    } catch (err: any) {
+        console.error("Error getting reader name:", err);
+        return res.status(401).send({ error: err.message });
+    }
 }
 //to show name of another user who got cuz before
 const getNameOfAnotherUsers = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    const userId = req.query.uid as string
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        if (userId && userId.length <= 128) {
-            await admin.auth().getUser(userId)
-                .then((userRecord) => {
-                    return res.send({ readername: userRecord.displayName })
-                })
-                .catch((error) => {
-                    console.error('Error fetching user record:', error);
-                });
-        }
-        else res.send('no reader found')
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
+        const userId = req.query.uid as string;
 
-    }).catch((err) => {
-        return res.status(401).send(err.message);
-    })
+        if (!token) {
+            return res.status(401).send({ error: 'Unauthorized: Missing Authorization Header' });
+        }
+
+        if (userId && userId.length <= 128) {
+            const response = await admin.auth().verifyIdToken(token);
+
+            const userRecord = await admin.auth().getUser(userId);
+            return res.status(200).send({ readername: userRecord.displayName });
+        } else {
+            return res.send('No reader found');
+        }
+    } catch (err: any) {
+        console.error('Error fetching user record:', err);
+        return res.status(401).send({ error: err.message });
+    }
 }
 export default { createHatim, retrieveHatim, getSingleCuz, deleteHatim, updateHatim, getReaderName, getNameOfAnotherUsers };

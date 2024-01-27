@@ -11,7 +11,7 @@ export class User {
     email: string;
     password: string;
     role: number;
-    books: [Book]
+    books: Book[] = [];
 
     constructor(username: string, email: string, password: string, role: number) {
         this.userName = username

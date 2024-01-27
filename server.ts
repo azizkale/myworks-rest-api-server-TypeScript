@@ -1,7 +1,5 @@
 import express from 'express';
-import swaggerUI from 'swagger-ui-express';
 import cors from 'cors';
-import { specs } from './swagger';
 
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
@@ -71,8 +69,6 @@ app.use('/', generalroutes)
 app.use('/', displayroutes)
 app.use('/', grouprotes)
 
-//swagger configuration
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get("/checkuser", (req, res) => {
   checkUser("azizkale@hotmail.com");

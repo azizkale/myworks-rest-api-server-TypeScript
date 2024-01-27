@@ -2,12 +2,11 @@ import { Request, Response } from 'express';
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 
-const pirInstance = new Pir(null, null, null, null, null, [], [])
+const pirInstance = new Pir(null, null, null, null, '', [], [])
 
 const retrievePirsNames = async (req: Request, res: Response) => {
-
-    pirInstance.retrievePirs().then(async (dataSnapshot) => {
-        const dataArray = Object.values(dataSnapshot.val());
+    pirInstance.retrievePirs().then(async (dataSnapshot: any) => {
+        const dataArray: Pir[] = Object.values(dataSnapshot.val());
 
         const newDataArray = await dataArray.map((data: Pir) => {
             return {
@@ -15,19 +14,18 @@ const retrievePirsNames = async (req: Request, res: Response) => {
                 name: data.name
             };
         });
-        return res.status(200).send(newDataArray)
+
+        return res.status(200).send(newDataArray);
     }).catch((error) => {
         return res.status(401).send(error.message);
-
     });
+};
 
-
-}
 
 const retrieveChaptersNamesByPirId = async (req: Request, res: Response) => {
     const pirId = req.query.pirId;
     pirInstance.retrieveChaptersNamesByPirId(pirId).then(async (pir) => {
-        const dataArray = Object.values(pir.val().chapters);
+        const dataArray: Chapter[] = Object.values(pir.val().chapters);
 
         const newDataArray = await dataArray.map((data: Chapter) => {
             return {
@@ -36,11 +34,13 @@ const retrieveChaptersNamesByPirId = async (req: Request, res: Response) => {
                 pirId: data.pirId
             };
         });
-        return res.status(200).send(newDataArray)
+
+        return res.status(200).send(newDataArray);
     }).catch((error) => {
         return res.status(401).send(error.message);
     });
-}
+};
+
 
 const retrieveChaptersByChapterId = async (req: Request, res: Response) => {
     const chapterId = req.query.chapterId;

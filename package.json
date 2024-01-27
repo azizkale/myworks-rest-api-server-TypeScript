@@ -4,7 +4,6 @@
   "description": "",
   "main": "server.ts",
   "author": "azizkale",
-  "type": "module",
   "scripts": {
     "test": "mocha tests/unit/",
     "dev": "nodemon server.ts",
@@ -18,12 +17,14 @@
     "firebase-admin": "^11.5.0",
     "js-yaml": "^4.1.0",
     "rxjs": "^7.8.1",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3",
     "token": "^0.1.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/js-yaml": "^4.0.9",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "eslint": "^8.36.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",

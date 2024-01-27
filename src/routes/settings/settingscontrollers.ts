@@ -4,17 +4,27 @@ import { getAuth, updatePassword } from "firebase/auth";
 const auth = getAuth();
 
 const getUserInfo = async (req: Request, res: Response) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        if (response)
-            admin.auth().getUserByEmail(response.email).then((user) => {
-                return res.status(200).send(user)
-            })
-        else
-            return res.status(404).send('user not found')
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
 
-    })
-}
+        if (!token) {
+            return res.status(401).send('Unauthorized: No token provided');
+        }
+
+        const decodedToken: any = await admin.auth().verifyIdToken(token);
+
+        if (!decodedToken) {
+            return res.status(404).send('User not found');
+        }
+
+        const user = await admin.auth().getUserByEmail(decodedToken.email);
+
+        return res.status(200).send(user);
+    } catch (error) {
+        console.error('Error getting user info:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+};
 const updateUser = async (req: Request, res: Response) => {
     const { updateObject } = req.body
     admin.auth().getUserByEmail(updateObject.email)
@@ -33,7 +43,7 @@ const updateUser = async (req: Request, res: Response) => {
 };
 const updateUserPassword = async (req: Request, res: Response) => {
     const { newPassword } = req.body
-    const user = auth.currentUser;
+    const user: any = auth.currentUser;
 
     updatePassword(user, newPassword).then(() => {
         // Update successful.

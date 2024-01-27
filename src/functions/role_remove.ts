@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 
-export const removeRole = async (email, role) => {
-    await admin.auth().getUserByEmail(email).then(async (userRecord) => {
+export const removeRole = async (email: any, role: any) => {
+    await admin.auth().getUserByEmail(email).then(async (userRecord: any) => {
         if (userRecord.customClaims.roles.includes(role)) {
             // deletes role to users
             const uid = userRecord.uid;
