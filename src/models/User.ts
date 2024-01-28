@@ -118,6 +118,7 @@ export class User {
             from(nodeRef.once('value', async (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
+
                     return data
                 } else {
                     return null;

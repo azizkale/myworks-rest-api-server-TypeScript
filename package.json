@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha tests/unit/",
     "dev": "nodemon server.ts",
-    "start": "node server.ts"
+    "start": "node npx ts-node server.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
