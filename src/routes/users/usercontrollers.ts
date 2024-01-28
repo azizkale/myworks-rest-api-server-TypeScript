@@ -47,6 +47,7 @@ const getUserById = async (req: Request, res: Response) => {
     const userId: string | any = req.query.uid
     admin.auth().getUser(userId)
         .then((userRecord) => {
+            console.log(userRecord)
             return res.status(200).send(userRecord)
         }).catch(error => {
             return { error: error.message }

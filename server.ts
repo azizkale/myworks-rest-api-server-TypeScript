@@ -45,9 +45,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// #########################################################################
-// This configures static hosting for files in /public that have the extensions
-// listed in the array.
 let options = {
   dotfiles: "ignore",
   etag: false,
@@ -84,3 +81,5 @@ app.listen(port, () => {
 });
 
 module.exports = app;
+
+// npx ts-node server.ts
