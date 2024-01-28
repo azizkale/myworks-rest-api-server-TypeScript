@@ -68,7 +68,8 @@ app.use('/', grouprotes)
 
 
 app.get("/checkuser", (req, res) => {
-  checkUser("azizkale@hotmail.com");
+  res.send('merhaba sahip')
+  // checkUser("azizkale@hotmail.com");
 });
 
 app.get("/removerole", (req, res) => {
@@ -82,4 +83,4 @@ app.listen(port, () => {
 
 module.exports = app;
 
-// npx ts-node server.ts
+// npx ts-node server.ts 
