@@ -6,8 +6,9 @@
   "author": "azizkale",
   "scripts": {
     "test": "mocha tests/unit/",
-    "dev": "nodemon server.ts",
-    "start": "node npx ts-node server.ts"
+    "build": "tsc",
+    "dev": "ts-node server.ts",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
