@@ -8,5 +8,5 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.json"]
+  "include": ["**/*.ts", "**/*.json", "package.json"]
 }
