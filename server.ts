@@ -21,7 +21,7 @@ const corsOptions = {
   origin: [
     "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
-    "https://mywebsite-3f527.web.app",
+    "https://mywebsite-3f527.web.app/",
     "http://192.168.0.17:4200",
     "192.168.178.111:4200"
   ],
@@ -68,8 +68,7 @@ app.use('/', grouprotes)
 
 
 app.get("/checkuser", (req, res) => {
-  res.send('merhaba sahip')
-  // checkUser("azizkale@hotmail.com");
+  checkUser("azizkale@hotmail.com");
 });
 
 app.get("/removerole", (req, res) => {
@@ -82,5 +81,3 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-
-// npx ts-node server.ts 
