@@ -30,7 +30,7 @@ const signin = async (req: Request, res: Response) => {
                                 });
                             })
                             .catch((err) => {
-                                return res.status(401).send(err.message);
+                                return res.send(err.message);
                             });
                     })
                     .catch((error) => {

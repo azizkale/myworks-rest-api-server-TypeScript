@@ -17,7 +17,7 @@ const retrievePirsNames = async (req: Request, res: Response) => {
 
         return res.status(200).send(newDataArray);
     }).catch((error) => {
-        return res.status(401).send(error.message);
+        return res.send(error.message);
     });
 };
 
