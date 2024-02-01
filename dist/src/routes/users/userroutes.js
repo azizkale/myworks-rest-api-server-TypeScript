@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const usercontrollers_1 = __importDefault(require("./usercontrollers"));
+const sigin_1 = __importDefault(require("../../functions/sigin"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const checkTokenExpiration_1 = __importDefault(require("../../functions/checkTokenExpiration"));
+const router = express_1.default.Router();
+router.use(body_parser_1.default.json());
+router.post('/signin', sigin_1.default.signin);
+router.post('/users/createuser', usercontrollers_1.default.createUser);
+router.get('/users/getUserById', usercontrollers_1.default.getUserById);
+router.get('/users/retrieveallusers', usercontrollers_1.default.retrieveAllUsers);
+router.get('/users/retrieveeditorbyid', usercontrollers_1.default.retrieveEditorbyEditorId);
+router.get('/users/retrieveuserbyemail', checkTokenExpiration_1.default, usercontrollers_1.default.retrieveUserByEmail);
+router.patch('/users/addroletouser', usercontrollers_1.default.addRoleToUser);
+router.patch('/users/addparticipant', checkTokenExpiration_1.default, usercontrollers_1.default.addPArticipantToGroup);
+router.get('/users/getuserroles', checkTokenExpiration_1.default, usercontrollers_1.default.getUserRoles);
+router.get('/users/retrieveallusersofthegroup', checkTokenExpiration_1.default, usercontrollers_1.default.retrieveAllUsersOfTheGroup);
+router.get('/users/getuserrolesofthegroup', checkTokenExpiration_1.default, usercontrollers_1.default.retrieveSingleUserRolesOfTheGroup);
+exports.default = router;
