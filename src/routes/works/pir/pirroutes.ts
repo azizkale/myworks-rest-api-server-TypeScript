@@ -2,7 +2,6 @@ import express from 'express';
 import pircontrollers from './pircontrollers'
 import bodyParser from 'body-parser';
 import tokenControl from '../../../functions/checkTokenExpiration';
-import chechkRole from '../../../functions/role_check';
 
 const router = express.Router();
 

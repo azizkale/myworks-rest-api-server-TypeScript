@@ -5,7 +5,7 @@ import { Chapter } from '../../../models/Chapter';
 import { WordPair } from '../../../models/WordPair';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
-const pirInstance = new Pir(null, null, null, null, '', [], [])
+const pirInstance = new Pir(null, null, null, null, '', [], [], '')
 const wordPairInstance = new WordPair('', '', null, null, null)
 
 const createPir = async (req: Request, res: Response) => {
@@ -22,7 +22,6 @@ const createPir = async (req: Request, res: Response) => {
             { error: err.message }
         );
     })
-
 }
 
 const assingPirToGroup = async (req: Request, res: Response) => {

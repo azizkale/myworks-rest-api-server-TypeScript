@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 
-const pirInstance = new Pir(null, null, null, null, '', [], [])
+const pirInstance = new Pir(null, null, null, null, '', [], [], '')
 
 const retrievePirsNames = async (req: Request, res: Response) => {
     pirInstance.retrievePirs().then(async (dataSnapshot: any) => {
@@ -11,7 +11,8 @@ const retrievePirsNames = async (req: Request, res: Response) => {
         const newDataArray = await dataArray.map((data: Pir) => {
             return {
                 pirId: data.pirId,
-                name: data.name
+                name: data.name,
+                imageUrl: data.imageUrl
             };
         });
 

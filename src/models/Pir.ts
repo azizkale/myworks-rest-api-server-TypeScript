@@ -15,6 +15,7 @@ export class Pir {
     assigned: boolean | any;
     chapters: Chapter[];
     wordPairs: WordPair[];
+    imageUrl: string;
     groupId: any // which group edits the pir
 
     constructor(
@@ -24,7 +25,8 @@ export class Pir {
         name: string | any,
         description: string,
         chapters: Chapter[],
-        wordPairs: WordPair[]
+        wordPairs: WordPair[],
+        imageUrl: string
     ) {
         this.pirId = pirId
         this.editorId = editorId
@@ -33,6 +35,7 @@ export class Pir {
         this.description = description
         this.chapters = chapters
         this.wordPairs = wordPairs
+        this.imageUrl = imageUrl
 
     }
 
@@ -43,6 +46,7 @@ export class Pir {
             pirId: pir.pirId,
             name: pir.name,
             description: pir.description,
+            imageUrl: pir.imageUrl
         });
     }
 
