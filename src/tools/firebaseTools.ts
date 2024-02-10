@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
-require('dotenv').config();
+import * as admin from "firebase-admin";
+
+require("dotenv").config();
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -8,7 +10,7 @@ const firebaseConfig = {
   projectId: process.env.projectId,
   storageBucket: process.env.storageBucket,
   messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId
+  appId: process.env.appId,
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
