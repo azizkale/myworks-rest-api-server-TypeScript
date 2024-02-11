@@ -4,52 +4,53 @@ import { firebaseApp } from "../tools/firebaseTools";
 import * as admin from "firebase-admin";
 
 const auth = getAuth(firebaseApp);
+
 const signin = async (req: Request, res: Response) => {
-  const { email, password } = await req.body;
-  await signInWithEmailAndPassword(auth, email, password)
-    .then(async (userCredential) => {
-      // Signed in
-      if (userCredential.user) {
-        const user = await userCredential.user;
-        //getting token from Fire-Auth
-        await user
-          .getIdToken()
-          .then((idToken) => {
-            console.log(idToken);
-            // Send the ID token to the server for authentication
-            admin
-              .auth()
-              .verifyIdToken(idToken)
-              .then((decodedToken) => {
-                // Token is valid.
-                return res.send({
-                  status: 200,
-                  message: "Success",
-                  token: idToken,
-                  uid: decodedToken.user_id,
-                  displayName: user.providerData[0].displayName,
-                  photoURL: user.providerData[0].photoURL,
-                  roles: decodedToken.roles,
-                });
-              })
-              .catch((err) => {
-                console.log(err);
-                return res.send(err.message);
-              });
-          })
-          .catch((error) => {
-            console.log(error);
-            return res.send({
-              error: error.message,
-              status: 404,
-            });
-          });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      return res.send({ error: error.message, status: 404 });
-    });
+  try {
+    const { email, password } = await req.body;
+
+    // Sign in user with email and password
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    if (!userCredential.user) {
+      throw new Error("User not found or incorrect credentials");
+    }
+
+    // Extract user and token information
+    const user = userCredential.user;
+    const idToken = await user.getIdToken();
+
+    // Verify ID token on the server (optional)
+    if (process.env.FIREBASE_VERIFY_ID_TOKENS === "true") {
+      await admin.auth().verifyIdToken(idToken);
+    }
+
+    // Respond with success message and user data
+    const response: any = {
+      status: 200,
+      message: "Success",
+      token: idToken,
+      uid: user.uid,
+      displayName: user.providerData[0].displayName,
+      photoURL: user.providerData[0].photoURL,
+    };
+
+    // Add roles if they are included in the decoded token and verification is enabled
+    if (process.env.FIREBASE_VERIFY_ID_TOKENS === "true") {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      console.log(decodedToken);
+      response.roles = decodedToken.roles;
+    }
+
+    res.send(response);
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).send({ error: error.message });
+  }
 };
 
 export default { signin };
