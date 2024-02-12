@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import * as admin from "firebase-admin";
 
 require("dotenv").config();
 

@@ -1,5 +1,8 @@
 import express from "express";
 import cors from "cors";
+import { getAuth } from "firebase/auth";
+import { firebaseApp } from "./tools/firebaseClientInitialization";
+import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
 
 const app = express();
 import userroutes from "./routes/userroutes";
@@ -41,6 +44,17 @@ app.use("/", generalroutes);
 app.use("/", displayroutes);
 app.use("/", grouprotes);
 app.use("/", lugatrotes);
+
+app.get("/", async (req, res) => {
+  try {
+    await firebaseAdminAppInitializer.getUser(""); //user not necessary, just to initialize firebase admin SDK
+    const auth = getAuth(firebaseApp); // to initilize firebase client SDK
+    res.status(200).send("Operations completed successfully.");
+  } catch (error: any) {
+    console.error("Error:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 app.get("/removerole", (req, res) => {
   const { email, role } = req.query;

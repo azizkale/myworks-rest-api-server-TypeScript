@@ -1,9 +1,9 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Request, Response } from "express";
-import { firebaseApp } from "../tools/firebaseTools";
+import firebaseApp from "../tools/firebaseAdminInitialization";
 import * as admin from "firebase-admin";
 
-const auth = getAuth(firebaseApp);
+const auth = getAuth();
 
 const signin = async (req: Request, res: Response) => {
   try {
