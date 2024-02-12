@@ -5,10 +5,17 @@ import { concatMap, filter, from, map, toArray } from "rxjs";
 import { Group } from "../models/Group";
 import { deleteGroupFromUsers } from "../middlewares/deleteGroupFromUser";
 import { Pir } from "../models/Pir";
+import { PirService } from "./pirService";
 
 const db = getDatabase();
 
 export class GroupService {
+  pirService: PirService;
+
+  constructor(pirService: PirService) {
+    this.pirService = pirService;
+  }
+
   async createGroup(
     groupName: any,
     mentorId: any,
@@ -67,8 +74,6 @@ export class GroupService {
   }
 
   async deleteGroup(groupId: any): Promise<any[]> {
-    const pirInstance = new Pir(null, null, null, null, "", [], [], "");
-
     //at first deleted the node 'assigned' of all pir of this group on pirlist
     return new Promise<any[]>((resolve, reject) => {
       const nodeRef = admin.database().ref(`groups/${groupId}/works/pirs`);

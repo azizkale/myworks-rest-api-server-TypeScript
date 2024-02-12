@@ -2,7 +2,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Request, Response } from "express";
 // import firebaseApp from "../tools/firebaseAdminInitialization";
 import * as admin from "firebase-admin";
-import { updateIdToken } from "../functions/updateIdToken";
+import { updateIdToken } from "./updateIdToken";
 
 const auth = getAuth();
 
@@ -41,7 +41,6 @@ const signin = async (req: Request, res: Response) => {
     if (process.env.ID_TOKEN) {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
       response.roles = decodedToken.roles;
-      console.log(response);
     }
 
     res.send(response);
