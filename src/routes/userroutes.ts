@@ -1,7 +1,7 @@
 import express from "express";
 import { UserController } from "../controllers/usercontrollers";
 import { UserService } from "../services/userService";
-import signin from "../middlewares/sigin";
+import signin from "../functions/sigin";
 import bodyParser from "body-parser";
 import tokenControl from "../middlewares/checkTokenExpiration";
 const router = express.Router();
