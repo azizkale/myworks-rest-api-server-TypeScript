@@ -1,7 +1,8 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Request, Response } from "express";
-import firebaseApp from "../tools/firebaseAdminInitialization";
+// import firebaseApp from "../tools/firebaseAdminInitialization";
 import * as admin from "firebase-admin";
+import { updateIdToken } from "../functions/updateIdToken";
 
 const auth = getAuth();
 
@@ -23,11 +24,8 @@ const signin = async (req: Request, res: Response) => {
     // Extract user and token information
     const user = userCredential.user;
     const idToken = await user.getIdToken();
-
-    // Verify ID token on the server (optional)
-    if (process.env.FIREBASE_VERIFY_ID_TOKENS === "true") {
-      await admin.auth().verifyIdToken(idToken);
-    }
+    //stores idToken within .env files
+    updateIdToken(idToken);
 
     // Respond with success message and user data
     const response: any = {
@@ -40,10 +38,10 @@ const signin = async (req: Request, res: Response) => {
     };
 
     // Add roles if they are included in the decoded token and verification is enabled
-    if (process.env.FIREBASE_VERIFY_ID_TOKENS === "true") {
+    if (process.env.ID_TOKEN) {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
-      console.log(decodedToken);
       response.roles = decodedToken.roles;
+      console.log(response);
     }
 
     res.send(response);
