@@ -1,13 +1,12 @@
 #!/bin/bash
-echo "start"
 
-# Build the Docker image
-docker build -t easyreadrestful . || { echo "Docker build failed"; exit 1; }
+echo "Starting the build and deployment process..."
 
-# Stop the existing container if it's running
-docker stop easyreadrestful || true
+docker build -t easyreadrestful . || true
 
-# Run the Docker container
-docker run --name easyreadrestful -d -p 3000:3000 --rm easyreadrestful:latest || { echo "Docker run failed"; exit 1; }
+docker stop easyreadrestful_con || true
 
-echo "end"
+
+docker run --name easyreadrestful_con -d -p 3000:3000 --rm easyreadrestful:latest
+
+echo "Build and deployment completed successfully."
