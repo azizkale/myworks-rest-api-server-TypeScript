@@ -1,24 +1,38 @@
-### STAGE 1: Build ###
-FROM node:16.13.0-alpine AS build
+# Builder stage
+FROM node:14-alpine AS builder
+
 WORKDIR /app
+
+# Copy only package files and install dependencies
 COPY package.json package-lock.json ./
+
+# Create a directory for tools and copy the applicationDefault.json
+RUN mkdir -p ./dist/tools/
+COPY src/tools/applicationDefault.json ./dist/tools/
+
 RUN npm install
+
+# Copy the entire project and build
 COPY . .
+
 RUN npm run build
 
-### STAGE 2: Run ###
-FROM node:16.13.0-alpine
+# Server stage
+FROM node:14-alpine AS server
+
 WORKDIR /app
 COPY package.json package-lock.json ./
-COPY src/tools/applicationDefault.json /app/applicationDefault.json
+
+
+# Copy the environment file
+COPY .env .env
+
+# Install only production dependencies
 RUN npm install --only=production
-COPY --from=build /app/dist /app/dist
+COPY --from=builder /app/dist /app/dist
 
-# Set the environment variables
-ENV PORT=3000
-COPY .env /app/.env
-# Expose the port that the Node.js server listens on
-EXPOSE ${PORT}
+COPY . .
+EXPOSE 3000
 
-# Set the command to start the Node.js server
-CMD [ "node", "dist/server.js" ]
+# Start the application
+CMD ["npm", "run", "start"]

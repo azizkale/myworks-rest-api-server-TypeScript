@@ -21,6 +21,9 @@ export class PirService {
       name: pir.name,
       description: pir.description,
       imageUrl: pir.imageUrl,
+      type: pir.type,
+      author: pir.author,
+      allowed: pir.allowed,
     });
   }
 

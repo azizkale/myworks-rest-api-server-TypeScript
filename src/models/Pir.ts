@@ -1,4 +1,5 @@
 import { Chapter } from "./Chapter";
+import { PirType } from "./PirType";
 import { WordPair } from "./WordPair";
 
 export class Pir {
@@ -11,6 +12,9 @@ export class Pir {
   wordPairs: WordPair[];
   imageUrl: string;
   groupId: any; // which group edits the pir
+  author: string;
+  type: PirType;
+  allowed: boolean;
 
   constructor(
     pirId: any,
@@ -20,7 +24,10 @@ export class Pir {
     description: string,
     chapters: Chapter[],
     wordPairs: WordPair[],
-    imageUrl: string
+    imageUrl: string,
+    author: string,
+    type: PirType,
+    allowed: boolean
   ) {
     this.pirId = pirId;
     this.editorId = editorId;
@@ -30,5 +37,8 @@ export class Pir {
     this.chapters = chapters;
     this.wordPairs = wordPairs;
     this.imageUrl = imageUrl;
+    this.author = author;
+    this.type = type;
+    this.allowed = allowed;
   }
 }

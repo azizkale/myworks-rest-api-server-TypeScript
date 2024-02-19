@@ -3,6 +3,7 @@ import cors from "cors";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "./tools/firebaseClientInitialization";
 import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
+import checkRole from "./middlewares/role_check";
 
 const app = express();
 import userroutes from "./routes/userroutes";
@@ -47,7 +48,11 @@ app.use("/", displayroutes);
 app.use("/", grouprotes);
 app.use("/", lugatrotes);
 
-app.get("/", async (req, res) => {
+app.get("/hi", async (req, res, next) => {
+  res.send("hi");
+});
+
+app.get("/", async (req, res, next) => {
   try {
     await firebaseAdminAppInitializer.getUser(""); //user not necessary, just to initialize firebase admin SDK
     const auth = getAuth(firebaseApp); // to initilize firebase client SDK
