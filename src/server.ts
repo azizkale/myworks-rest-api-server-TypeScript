@@ -19,7 +19,7 @@ import displayroutes from "./routes/pirroutes";
 import { removeRole } from "./middlewares/role_remove";
 import lugatrotes from "./routes/lugatroutes";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 require("dotenv").config();
 
