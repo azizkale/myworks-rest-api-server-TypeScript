@@ -25,7 +25,7 @@ COPY package.json package-lock.json ./
 
 
 # Copy the environment file
-COPY .env .env
+# COPY .env .env
 
 # Install only production dependencies
 RUN npm install --only=production
