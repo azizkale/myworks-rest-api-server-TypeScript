@@ -8,6 +8,6 @@ docker build -t easyreadrestful . || { echo "Docker build failed"; exit 1; }
 docker stop easyreadrestful || true
 
 # Run the Docker container
-docker run --name easyreadrestful -d -p 5000:5000 --rm easyreadrestful:latest || { echo "Docker run failed"; exit 1; }
+docker run --name easyreadrestful -d -p 3000:3000 --rm easyreadrestful:latest || { echo "Docker run failed"; exit 1; }
 
 echo "end"
