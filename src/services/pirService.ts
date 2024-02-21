@@ -96,6 +96,7 @@ export class PirService {
         pirId: chapter.pirId,
         createDate: chapter.createDate,
         chapterId: chapter.chapterId,
+        allowed: chapter.allowed,
       }
     );
   }
