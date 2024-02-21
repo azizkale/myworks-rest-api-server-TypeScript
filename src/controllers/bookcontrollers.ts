@@ -2,7 +2,6 @@ import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { Request, Response } from "express";
 import { Book } from "../models/Book";
-const { v1: uuidv1, v4: uuidv4 } = require("uuid");
 const db = getDatabase();
 
 export class BookController {
@@ -14,7 +13,7 @@ export class BookController {
         .auth()
         .verifyIdToken(token)
         .then(async (response) => {
-          book.bookId = await uuidv1();
+          book.bookId = await new Date().getTime().toString();
           await set(
             ref(db, "users/" + response.uid + "/works/books/" + book.bookId),
             book

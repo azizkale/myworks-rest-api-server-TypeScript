@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import admin from "firebase-admin";
 import { GroupService } from "../services/groupservice";
 
-const { v1: uuidv1 } = require("uuid");
-
 export class GroupController {
   private groupService: GroupService;
 
@@ -17,7 +15,7 @@ export class GroupController {
       .auth()
       .getUserByEmail(mentorEmail)
       .then(async (mentor) => {
-        const groupId = await uuidv1();
+        const groupId = await new Date().getTime().toString();
         await this.groupService
           .createGroup(groupName, mentor.uid, groupId, mentorEmail)
           .then((result: any) => {

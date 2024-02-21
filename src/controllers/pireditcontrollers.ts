@@ -6,8 +6,6 @@ import { Chapter } from "../models/Chapter";
 import { PirService } from "../services/pirService";
 import { WordPairService } from "../services/wordPairService";
 
-const { v1: uuidv1, v4: uuidv4 } = require("uuid");
-
 export class PirEditController {
   private pirService: PirService;
   private wordPairService: WordPairService;
@@ -21,7 +19,7 @@ export class PirEditController {
     let newPir: Pir = req.body.pir;
 
     if (newPir.pirId === null) {
-      newPir.pirId = await uuidv1();
+      newPir.pirId = new Date().getTime().toString();
     }
 
     await this.pirService
@@ -55,7 +53,7 @@ export class PirEditController {
 
   createChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
-    chapter.chapterId = uuidv1();
+    chapter.chapterId = new Date().getTime().toString();
     this.pirService
       .addChapterToPir(chapter)
       .then(() => {

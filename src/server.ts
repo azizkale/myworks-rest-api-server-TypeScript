@@ -30,7 +30,11 @@ const corsOptions = {
     "https://mywebsite-3f527.web.app",
     "http://192.168.0.17:4200",
     "192.168.178.111:4200",
+    "http://89.58.18.182",
   ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  preflightContinue: false,
   default: "http://localhost:4200",
   optionsSuccessStatus: 200,
 };

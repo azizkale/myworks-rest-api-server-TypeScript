@@ -68,19 +68,19 @@ export class GroupService {
   }
 
   async deleteGroup(groupId: any): Promise<any[]> {
-    const pirInstance = new Pir(
-      null,
-      null,
-      null,
-      null,
-      "",
-      [],
-      [],
-      "",
-      "",
-      type,
-      true
-    );
+    // const pirInstance = new Pir(
+    //   null,
+    //   null,
+    //   null,
+    //   null,
+    //   "",
+    //   [],
+    //   [],
+    //   "",
+    //   "",
+    //   type,
+    //   true
+    // );
 
     //at first deleted the node 'assigned' of all pir of this group on pirlist
     return new Promise<any[]>((resolve, reject) => {
