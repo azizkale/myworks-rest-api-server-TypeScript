@@ -24,8 +24,6 @@ export const updateIdToken = async (idToken$: any) => {
 
     // Write the updated content back to the .env file
     fs.writeFileSync(envFilePath, envContent, { flag: "w" });
-
-    console.log("ID token updated successfully.");
   } catch (error) {
     console.error("Error updating ID token:", error);
   }
