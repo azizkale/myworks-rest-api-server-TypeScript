@@ -17,6 +17,7 @@ import grouprotes from "./routes/grouproutes";
 import displayroutes from "./routes/pirroutes";
 import { removeRole } from "./middlewares/role_remove";
 import lugatrotes from "./routes/lugatroutes";
+import questionroutes from "./routes/questionroutes";
 
 const port = process.env.PORT || 3001;
 
@@ -50,10 +51,10 @@ app.use("/", generalroutes);
 app.use("/", displayroutes);
 app.use("/", grouprotes);
 app.use("/", lugatrotes);
+app.use("/", questionroutes);
 
 app.get("/hi", async (req, res, next) => {
   res.send("hi");
-
 });
 
 app.get("/", async (req, res, next) => {
