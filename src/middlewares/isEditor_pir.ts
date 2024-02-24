@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 import { NextFunction, Request, Response } from "express";
 
-export const isMentor = async (
+export const isEditor_pir = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,7 +18,7 @@ export const isMentor = async (
 
     const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-    if (decodedToken.roles && decodedToken.roles.includes("mentor")) {
+    if (decodedToken.roles && decodedToken.roles.includes("editor_pir")) {
       next();
     } else {
       console.log("Unauthorized access: Insufficient role");
@@ -32,4 +32,4 @@ export const isMentor = async (
   }
 };
 
-export default isMentor;
+export default isEditor_pir;
