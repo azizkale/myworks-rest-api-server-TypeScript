@@ -5,6 +5,7 @@ import { GroupService } from "../services/groupservice";
 import { WordPairService } from "../services/wordPairService";
 import bodyParser from "body-parser";
 import tokenControl from "../middlewares/checkTokenExpiration";
+import isAdmin from "../middlewares/isAdmin";
 
 const router = express.Router();
 const groupService = new GroupService();
@@ -13,7 +14,11 @@ const pirService = new PirService(groupService);
 const pirEditController = new PirEditController(pirService, wordPairService);
 
 router.use(bodyParser.json());
-router.post("/pir/create", tokenControl, pirEditController.createPir);
+router.post(
+  "/pir/create",
+  [tokenControl, isAdmin],
+  pirEditController.createPir
+);
 // router.get('/pir/getpirs', tokenControl, pircontrollers.retrievePirs)
 router.patch("/pir/updatepir", tokenControl, pirEditController.updatePir);
 router.delete("/pir/deletepir", tokenControl, pirEditController.deletePir);
