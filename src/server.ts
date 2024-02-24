@@ -3,7 +3,6 @@ import cors from "cors";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "./tools/firebaseClientInitialization";
 import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
-import { readTxtFile } from "./functions/readTxtFile";
 
 const app = express();
 import userroutes from "./routes/userroutes";
@@ -56,7 +55,6 @@ app.use("/", questionroutes);
 
 app.get("/hi", async (req, res, next) => {
   res.send("hi");
-  readTxtFile();
 });
 
 app.get("/", async (req, res, next) => {

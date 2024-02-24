@@ -2,7 +2,12 @@ import { from, Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import * as fs from "fs";
 
-export const readTxtFile = (): Observable<string[]> => {
+interface WordPair {
+  word: string;
+  meaning: string;
+}
+
+export const readTxtFile = (): Observable<WordPair[]> => {
   const filePath: string = "src/functions/db.txt";
 
   return from(
@@ -15,31 +20,40 @@ export const readTxtFile = (): Observable<string[]> => {
   ).pipe(
     map((data) => data.split("\n").map((line) => line.trim())),
     map((lines) => lines.filter((line) => line !== "" && line.length >= 5)),
-    map((filteredLines) =>
-      filteredLines.map((line) => extractContentBeforeFirstBracket(line))
-    )
+    map((filteredLines) => filteredLines.map((line) => createWordPair(line)))
   );
 };
 
 // Yardımcı fonksiyon
-const extractContentBeforeFirstBracket = (line: string): string => {
-  const match = line.match(/[\[\(]/);
-  return match ? line.substring(0, match.index).trim() : line;
+const createWordPair = (line: string): WordPair => {
+  const match: any = line.match(/[\[\(](.*?)[\]\)]/);
+  const word = match ? line.substring(0, match.index).trim() : line;
+  const meaning: any = match
+    ? removeBrackets(line, match.index + match[0].length).trim()
+    : "";
+  return { word, meaning };
+  return { word, meaning };
+};
+
+const removeBrackets = (line: string, startIndex: number): string => {
+  let endIndex = line.indexOf("]", startIndex);
+  if (endIndex === -1) {
+    endIndex = line.indexOf(")", startIndex);
+  }
+  return endIndex !== -1
+    ? line.substring(0, startIndex) + line.substring(endIndex + 1)
+    : line;
 };
 
 readTxtFile().subscribe(
-  (extractedContents) => {
-    console.log("Extracted Contents:", extractedContents);
-  },
-  (error) => console.error(`Error reading file: ${error}`)
-);
+  (wordPairs) => {
+    console.log("Word Pairs:", wordPairs);
 
-readTxtFile().subscribe(
-  (resultLines) => {
-    const outputPath: string = "src/functions/word.txt";
-    const linesToWrite = resultLines.join("\n");
+    // JSON nesnelerini içeren bir array'i birleştirip bir dosyaya yazma işlemi
+    const outputPath: string = "src/functions/word_pairs.json";
+    const content = JSON.stringify(wordPairs, null, 2);
 
-    fs.writeFile(outputPath, linesToWrite, (err) => {
+    fs.writeFile(outputPath, content, (err) => {
       if (err) {
         console.error(`Error writing file: ${err}`);
       } else {
