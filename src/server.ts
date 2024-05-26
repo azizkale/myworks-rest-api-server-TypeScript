@@ -3,6 +3,7 @@ import cors from "cors";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "./tools/firebaseClientInitialization";
 import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
+import { myAI } from "./functions/easyReadOpenAI";
 
 const app = express();
 import userroutes from "./routes/userroutes";
@@ -54,7 +55,9 @@ app.use("/", lugatrotes);
 app.use("/", questionroutes);
 
 app.get("/hi", async (req, res, next) => {
-  res.send("hi");
+  myAI()
+    .then((data) => res.json(data))
+    .catch((err) => console.error(err));
 });
 
 app.get("/", async (req, res, next) => {
