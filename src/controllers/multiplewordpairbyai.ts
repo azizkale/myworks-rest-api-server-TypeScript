@@ -3,9 +3,9 @@ import { getMultipleWordPairs } from "../functions/easyReadOpenAI";
 
 export class MultipleWordPairController {
   getWordPairs = async (req: Request, res: Response) => {
-    const wordPairList: Array<any> | any = req.body.wordPairList;
-    const text: any = req.body.text;
-    return getMultipleWordPairs(text, wordPairList)
+    const { text, listWordPairs } = req.body;
+
+    return getMultipleWordPairs(text, listWordPairs)
       .then(async (wordpairs) => {
         return res.status(200).send(wordpairs);
       })
