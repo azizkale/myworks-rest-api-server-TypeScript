@@ -3,7 +3,7 @@ import cors from "cors";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "./tools/firebaseClientInitialization";
 import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
-import { myAI, asd } from "./functions/easyReadOpenAI";
+import { getMultipleWordPairs } from "./functions/easyReadOpenAI";
 
 const app = express();
 import userroutes from "./routes/userroutes";
@@ -19,6 +19,7 @@ import displayroutes from "./routes/pirroutes";
 import { removeRole } from "./middlewares/role_remove";
 import lugatrotes from "./routes/lugatroutes";
 import questionroutes from "./routes/questionroutes";
+import multiplewordpairroutes from "./routes/multiplewordpairroutes";
 
 const port = process.env.PORT || 3001;
 
@@ -53,11 +54,12 @@ app.use("/", displayroutes);
 app.use("/", grouprotes);
 app.use("/", lugatrotes);
 app.use("/", questionroutes);
+app.use("/", multiplewordpairroutes);
 
 app.get("/hi", async (req, res, next) => {
-  myAI()
-    .then((data) => res.json(data))
-    .catch((err) => console.error(err));
+  // getMultipleWordPairs()
+  //   .then((data) => res.json(data))
+  //   .catch((err) => console.error(err));
 });
 
 app.get("/", async (req, res, next) => {

@@ -12,22 +12,18 @@ interface sampleWordPair {
   meaning: string;
 }
 
-const text = `
-Lafz-ı Celâl ve İsm-i Âzam da denen “Allah” kelime-i mübarekesi, kendini bize “Esmâ-i Hüsnâ”sıyla bildiren ve sıfât-ı sübhaniyesiyle zihin, mantık ve muhâkemelerimize bir çerçeve vaz’eden, bütün esmânın Müsemmâ-i Akdesi ve bütün evsâf-ı kemaliyenin Mevsûf-u Münezzehi, ulûhiyet tahtının biricik mâliki ve rubûbiyet arşının sahib-i bîmisali Zât-ı Ecell ü A’lâ’nın adıdır. Seyyid Şerif’in de ifade ettiği gibi, “Allah” lafz-ı mübareği “min haysü hüve” Zât-ı İlâhiyenin ism-i hâssıdır ve usûlüddin ulemâsınca o bir ism-i Zât’tır. Aynı zamanda “İsm-i Celâl” ve “İsm-i Âzam” diye de bilinen bu mübarek kelime hususî mânâda “İsm-i Âzam” olarak da zikredilmektedir.
+// const text = `
+// Lafz-ı Celâl ve İsm-i Âzam da denen “Allah” kelime-i mübarekesi, kendini bize “Esmâ-i Hüsnâ”sıyla bildiren ve sıfât-ı sübhaniyesiyle zihin, mantık ve muhâkemelerimize bir çerçeve vaz’eden, bütün esmânın Müsemmâ-i Akdesi ve bütün evsâf-ı kemaliyenin Mevsûf-u Münezzehi, ulûhiyet tahtının biricik mâliki ve rubûbiyet arşının sahib-i bîmisali Zât-ı Ecell ü A’lâ’nın adıdır. Seyyid Şerif’in de ifade ettiği gibi, “Allah” lafz-ı mübareği “min haysü hüve” Zât-ı İlâhiyenin ism-i hâssıdır ve usûlüddin ulemâsınca o bir ism-i Zât’tır. Aynı zamanda “İsm-i Celâl” ve “İsm-i Âzam” diye de bilinen bu mübarek kelime hususî mânâda “İsm-i Âzam” olarak da zikredilmektedir.
 
-Zât-ı Ulûhiyet’e ait bütün isimler birer esmâ-i sıfât, “Allah” lafzı ise bir ism-i Zât’tır ve bütün ilâhî isimleri ya bililtizam veya bittazammun ihtiva etmektedir. Şöyle ki, bir insan, “Lâ ilâhe ille’l-Kuddûs.. ille’r-Rahîm.. ille’l-Azîz... ilâ âhir.” gibi cümlelerle imanını ilan etse, bu cümleler esmâ-i hüsnâsıyla mâlum, sıfât-ı sübhaniyesiyle mâruf ve muhât o Zât’ı tam ifade edemediğinden maksat hâsıl olmaz. Zira böyle diyen biri, farkına varsın varmasın, daire-i ulûhiyet ve rubûbiyeti “Kuddûs”, “Rahîm” ve “Azîz” isimlerinin tecellî alanlarına inhisar ettirerek muhîti muhât hâline getirmiş ve bir mânâda daire-i ulûhiyeti tahdit etmiş olur.
-`;
+// Zât-ı Ulûhiyet’e ait bütün isimler birer esmâ-i sıfât, “Allah” lafzı ise bir ism-i Zât’tır ve bütün ilâhî isimleri ya bililtizam veya bittazammun ihtiva etmektedir. Şöyle ki, bir insan, “Lâ ilâhe ille’l-Kuddûs.. ille’r-Rahîm.. ille’l-Azîz... ilâ âhir.” gibi cümlelerle imanını ilan etse, bu cümleler esmâ-i hüsnâsıyla mâlum, sıfât-ı sübhaniyesiyle mâruf ve muhât o Zât’ı tam ifade edemediğinden maksat hâsıl olmaz. Zira böyle diyen biri, farkına varsın varmasın, daire-i ulûhiyet ve rubûbiyeti “Kuddûs”, “Rahîm” ve “Azîz” isimlerinin tecellî alanlarına inhisar ettirerek muhîti muhât hâline getirmiş ve bir mânâda daire-i ulûhiyeti tahdit etmiş olur.
+// `;
 
-export const asd = () => {
-  const wordsArray = text.split(" ");
-
-  wordsArray.forEach((w: any) => {
-    let word = wordsArray.find((wp: any) => wp.word === w.word);
-  });
-};
-
-export const myAI = async (): Promise<sampleWordPair[]> => {
+export const getMultipleWordPairs = async (
+  text: String,
+  listWordPair: Array<any>
+): Promise<sampleWordPair[]> => {
   try {
+    console.log("text: " + text);
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
