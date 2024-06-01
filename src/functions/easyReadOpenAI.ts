@@ -6,9 +6,13 @@ const openai = new OpenAI({
 
 export const getMultipleWordPairs = async (
   text: string,
-  listWordPairs: any[]
+  listWordPairs: any[],
+  chapterId: any,
+  pirId: any,
+  editorId: any
 ): Promise<any[]> => {
   try {
+    let uniqueCounter: number = 0;
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -30,9 +34,20 @@ export const getMultipleWordPairs = async (
           Tespit ettiğin kelimeler ve anlamlarını aşağıdaki WordPair interface formatında JSON nesneleri olarak oluştur:
 
           interface WordPair {
+            wordPairId: any;
             word: string;
             meaning: string;
+            chapterId: any;
+            pirId: any;
+            editorId: any
           }
+
+          Oluşturduğun JSON nesnelerinin hepsinde bazı değişkenler aşağıdaki gibi olsun;
+            wordPairId = 13 basamaklı random bir sayıi fakat tüm nesnelerinki birbirinden farklı olsun         
+            
+            chapterId= ${chapterId}
+            pirId = ${pirId}
+            editorId = ${editorId}
 
           Sonra '${listWordPairs}' dizisine bak. Eğer oluşturduğun Bu JSON nesneleri bu dizide yoksa bu diziye ekle. Eğer varsa ekleme. Diziyi sıfırlama, mevcut dataların üzerine ekleme yap.
           Taramayı 2 kez yap ve her seferinde listeyi kontrol et. Var olan kelimeleri listeye ekleme. Her taramada üstteki kriterlere uygun yeni kelimeleri listeye ekle.
