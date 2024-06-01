@@ -62,6 +62,7 @@ export class MultipleWordPairController {
 
     // return res.status(200).send(words);
     return getMultipleWordPairs(text, listWordPairs, chapterId, pirId, editorId)
+
       .then(async (wordpairs) => {
         return res.status(200).send(wordpairs);
       })

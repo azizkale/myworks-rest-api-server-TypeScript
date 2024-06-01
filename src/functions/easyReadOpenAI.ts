@@ -13,6 +13,7 @@ export const getMultipleWordPairs = async (
 ): Promise<any[]> => {
   try {
     let uniqueCounter: number = 0;
+
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
