@@ -51,7 +51,7 @@ export const getMultipleWordPairs = async (
             editorId = ${editorId}
 
           Sonra '${listWordPairs}' dizisine bak. Eğer oluşturduğun Bu JSON nesneleri bu dizide yoksa bu diziye ekle. Eğer varsa ekleme. Diziyi sıfırlama, mevcut dataların üzerine ekleme yap.
-          Taramayı 2 kez yap ve her seferinde listeyi kontrol et. Var olan kelimeleri listeye ekleme. Her taramada üstteki kriterlere uygun yeni kelimeleri listeye ekle.
+          Taramayı 3 kez yap ve her seferinde listeyi kontrol et. Var olan kelimeleri listeye ekleme. Her taramada üstteki kriterlere uygun yeni kelimeleri listeye ekle.
 
           Çıktı olarak sadece JSON array ver, başka metin ekleme.
           `,
