@@ -1,16 +1,10 @@
 import OpenAI from "openai";
-import { PirService } from "./pirService";
+import { WordPairService } from "./wordPairService";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 export class WordPairsFromChatGPTService {
-  private pirService: PirService;
-
-  constructor(pirService: PirService) {
-    this.pirService = pirService;
-  }
-
   getMultipleWordPairs = async (
     text: string,
     listWordPairs: any[],
@@ -19,9 +13,6 @@ export class WordPairsFromChatGPTService {
     editorId: any
   ): Promise<any[]> => {
     try {
-      if (listWordPairs.length == 0) {
-        // this.pirService.retri;
-      }
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [

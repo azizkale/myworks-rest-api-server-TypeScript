@@ -152,6 +152,7 @@ export class PirService {
       "pirs/" + chapter.pirId + "/chapters/" + chapter.chapterId
     );
     delete chapter.selectEditor; // removes selectEditor (no need)
+
     return ref
       .update(chapter)
       .then(() => {
