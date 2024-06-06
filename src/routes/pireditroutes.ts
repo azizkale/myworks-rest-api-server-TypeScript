@@ -52,7 +52,7 @@ router.patch(
 );
 router.get(
   "/pir/getallwordpairsofsinglepir",
-  pirEditController.retrieveAllWordPairsOfSinglePir
+  pirEditController.retrieveAllWordPairsOfTheChapter
 );
 router.delete(
   "/pir/deletewordpair",

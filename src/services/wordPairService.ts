@@ -22,17 +22,17 @@ export class WordPairService {
     );
   }
 
-  async retrieveAllWordPairsOfSinglePir(pirId: any): Promise<any[]> {
+  async retrieveAllWordPairsOfTheChapter(pirId: any, chapterId: any) {
     return new Promise<any[]>((resolve, reject) => {
-      const nodeRef = admin.database().ref("pirs/" + pirId + "/chapters");
+      const nodeRef = admin
+        .database()
+        .ref("pirs/" + pirId + "/chapters/" + chapterId + "/wordPairs");
       // Read the data at the node once
       nodeRef.once("value", (snapshot) => {
         if (snapshot.exists()) {
-          const chapters = snapshot.val();
-          return from(Object.values(chapters))
+          const wordPairs = snapshot.val();
+          from(Object.values(wordPairs))
             .pipe(
-              filter((chapter: any) => chapter.wordPairs), // Filter out chapters without wordPairs
-              mergeMap((chapter: any) => Object.values(chapter.wordPairs)), // Merge all wordPairs into a single stream
               toArray() // Collect the wordPairs into an array
             )
             .subscribe({
