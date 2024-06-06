@@ -9,8 +9,8 @@ import isAdmin from "../middlewares/isAdmin";
 
 const router = express.Router();
 const groupService = new GroupService();
-const wordPairService = new WordPairService();
 const pirService = new PirService(groupService);
+const wordPairService = new WordPairService();
 const pirEditController = new PirEditController(pirService, wordPairService);
 
 router.use(bodyParser.json());

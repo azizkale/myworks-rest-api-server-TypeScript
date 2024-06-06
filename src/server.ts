@@ -3,7 +3,7 @@ import cors from "cors";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "./tools/firebaseClientInitialization";
 import firebaseAdminAppInitializer from "./tools/firebaseAdminInitialization";
-import { getMultipleWordPairs } from "./functions/easyReadOpenAI";
+// import { getMultipleWordPairs } from "./services/WordPairsFromChatGPTService";
 
 const app = express();
 import userroutes from "./routes/userroutes";
