@@ -62,6 +62,8 @@ app.get("/hi", async (req, res, next) => {
   //   .catch((err) => console.error(err));
 });
 
+app.post("/refresh-token", async (req, res) => {});
+
 app.get("/", async (req, res, next) => {
   try {
     await firebaseAdminAppInitializer.getUser(""); //user not necessary, just to initialize firebase admin SDK
