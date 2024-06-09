@@ -31,6 +31,12 @@ export class WordPairsFromChatGPTService {
           - Fethullah Gülen'in kitaplarında veya vaazlarında geçen kelimelere benzeyen
           - Dini bir terim olabilecek veya olan
 
+          - Kelimelerin anlamlarını metindeki/cümledeki kontkslerine göre ver.
+          - Kelimeyi metindeki hali ile ver. Çekimleme yapma. 
+          - Ekleri varsa çıkarma. Ekleri yoksa ek ekleme
+          - Metinde geçmeyen kelimelerin anlamlarına bakma.
+          - Gerektiğinde "ç,ğ,ı,ş,ö" gibi Türkçe harflari kullan.
+
           Tespit ettiğin kelimeler ve anlamlarını aşağıdaki WordPair interface formatında JSON nesneleri olarak oluştur:
 
           interface WordPair {
