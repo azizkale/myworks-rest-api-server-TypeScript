@@ -3,13 +3,13 @@ import { initializeApp } from "firebase/app";
 require("dotenv").config();
 
 const firebaseConfig = {
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  databaseURL: process.env.databaseURL,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
+  apiKey: process.env.p1_apiKey,
+  authDomain: process.env.p1_authDomain,
+  databaseURL: process.env.p1_databaseURL,
+  projectId: process.env.p1_projectId,
+  storageBucket: process.env.p1_storageBucket,
+  messagingSenderId: process.env.p1_messagingSenderId,
+  appId: process.env.p1_appId,
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);

@@ -1,8 +1,8 @@
 import { getDatabase, set, ref } from "firebase/database";
 import * as admin from "firebase-admin";
-import { filter, from, mergeMap, toArray } from "rxjs";
+import { from, toArray } from "rxjs";
 import { WordPair } from "../models/WordPair";
-import { PirService } from "./pirService";
+import { db2 } from "../tools/firebaseAdminInitialization";
 
 const db = getDatabase();
 
