@@ -35,12 +35,14 @@ const application2: any = {
 
 admin.initializeApp(
   {
-    credential: admin.credential.cert(applicationDefault),
+    credential: admin.credential.cert(application2),
     databaseURL: process.env.p2_databaseURL,
   },
   "application2"
 );
 
 const firebaseAdminAppInitializer = admin.auth();
+const firebaseAdminAppInitializer2 = admin.auth(admin.app("application2"));
 const db2 = admin.database(admin.app("application2"));
-export { firebaseAdminAppInitializer, db2 };
+
+export { firebaseAdminAppInitializer, db2, firebaseAdminAppInitializer2 };

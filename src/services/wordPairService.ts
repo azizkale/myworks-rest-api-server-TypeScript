@@ -21,6 +21,17 @@ export class WordPairService {
       ),
       wordPair
     );
+
+    await db2
+      .ref(
+        "pirs/" +
+          wordPair.pirId +
+          "/chapters/" +
+          wordPair.chapterId +
+          "/wordPairs/" +
+          wordPair.wordPairId
+      )
+      .set(wordPair);
   }
 
   async retrieveAllWordPairsOfTheChapter(pirId: any, chapterId: any) {

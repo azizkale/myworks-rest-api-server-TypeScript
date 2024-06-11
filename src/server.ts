@@ -2,8 +2,14 @@ import express from "express";
 import cors from "cors";
 import { getAuth } from "firebase/auth";
 // import { firebaseApp } from "./tools/firebaseClientInitialization";
-import { firebaseAdminAppInitializer } from "./tools/firebaseAdminInitialization";
-import { firebaseApp } from "./tools/firebaseClientInitialization";
+import {
+  firebaseAdminAppInitializer,
+  firebaseAdminAppInitializer2,
+} from "./tools/firebaseAdminInitialization";
+import {
+  firebaseApp,
+  firebaseApp2,
+} from "./tools/firebaseClientInitialization";
 // import { getMultipleWordPairs } from "./services/WordPairsFromChatGPTService";
 
 const app = express();
@@ -68,7 +74,9 @@ app.post("/refresh-token", async (req, res) => {});
 app.get("/", async (req, res, next) => {
   try {
     firebaseApp;
+    firebaseApp2;
     firebaseAdminAppInitializer;
+    firebaseAdminAppInitializer2;
     //await initializeApp.auth(); //user not necessary, just to initialize firebase admin SDK
     // const auth = getAuth(firebaseApp); // to initilize firebase client SDK
     res.status(200).send("Operations completed successfully.");
