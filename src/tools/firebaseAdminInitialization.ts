@@ -43,6 +43,12 @@ admin.initializeApp(
 
 const firebaseAdminAppInitializer = admin.auth();
 const firebaseAdminAppInitializer2 = admin.auth(admin.app("application2"));
-const db2 = admin.database(admin.app("application2"));
+const db_pir = admin.database();
+const db_de = admin.database(admin.app("application2"));
 
-export { firebaseAdminAppInitializer, db2, firebaseAdminAppInitializer2 };
+export {
+  firebaseAdminAppInitializer,
+  firebaseAdminAppInitializer2,
+  db_de,
+  db_pir,
+};

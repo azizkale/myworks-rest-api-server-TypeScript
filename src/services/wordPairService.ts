@@ -2,7 +2,6 @@ import { getDatabase, set, ref } from "firebase/database";
 import * as admin from "firebase-admin";
 import { from, toArray } from "rxjs";
 import { WordPair } from "../models/WordPair";
-import { db2 } from "../tools/firebaseAdminInitialization";
 
 const db = getDatabase();
 
@@ -21,17 +20,6 @@ export class WordPairService {
       ),
       wordPair
     );
-
-    await db2
-      .ref(
-        "pirs/" +
-          wordPair.pirId +
-          "/chapters/" +
-          wordPair.chapterId +
-          "/wordPairs/" +
-          wordPair.wordPairId
-      )
-      .set(wordPair);
   }
 
   async retrieveAllWordPairsOfTheChapter(pirId: any, chapterId: any) {
