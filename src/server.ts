@@ -38,7 +38,7 @@ const corsOptions = {
     "http://localhost:4200",
     "https://mywebsite-3f527.web.app",
     "http://192.168.0.17:4200",
-    "http://89.58.18.182:4001",
+    "http://192.168.0.94:4200",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
@@ -89,6 +89,9 @@ app.get("/", async (req, res, next) => {
 app.get("/removerole", (req, res) => {
   const { email, role } = req.query;
   removeRole(email, role);
+});
+app.get("/hi", (req, res) => {
+  res.send("hi");
 });
 
 app.listen(port, () => {

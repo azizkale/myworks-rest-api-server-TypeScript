@@ -8,7 +8,6 @@ COPY package.json package-lock.json ./
 
 # Create a directory for tools and copy the applicationDefault.json
 RUN mkdir -p ./dist/tools/
-COPY src/tools/applicationDefault.json ./dist/tools/
 
 RUN npm install
 

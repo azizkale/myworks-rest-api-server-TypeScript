@@ -10,7 +10,6 @@ export class MultipleWordPairController {
 
   getWordPairs = async (req: Request, res: Response) => {
     const { text, listWordPairs, chapterId, pirId, editorId } = req.body;
-
     return this.wordPairsFromChatGTPService
       .getMultipleWordPairs(text, listWordPairs, chapterId, pirId, editorId)
       .then(async (wordpairs) => {
