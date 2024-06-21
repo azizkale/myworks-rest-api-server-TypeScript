@@ -64,6 +64,7 @@ app.use("/", questionroutes);
 app.use("/", multiplewordpairroutes);
 
 app.get("/hi", async (req, res, next) => {
+  res.send("hi");
   // getMultipleWordPairs()
   //   .then((data) => res.json(data))
   //   .catch((err) => console.error(err));
@@ -89,9 +90,6 @@ app.get("/", async (req, res, next) => {
 app.get("/removerole", (req, res) => {
   const { email, role } = req.query;
   removeRole(email, role);
-});
-app.get("/hi", (req, res) => {
-  res.send("hi");
 });
 
 app.listen(port, () => {
