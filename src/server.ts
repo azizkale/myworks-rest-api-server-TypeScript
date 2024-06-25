@@ -65,7 +65,7 @@ app.use("/", questionroutes);
 app.use("/", multiplewordpairroutes);
 
 app.get("/hi", async (req, res, next) => {
-  res.send("hi");
+  res.send("hi dude");
   // getMultipleWordPairs()
   //   .then((data) => res.json(data))
   //   .catch((err) => console.error(err));
