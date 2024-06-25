@@ -39,6 +39,7 @@ const corsOptions = {
     "https://mywebsite-3f527.web.app",
     "http://192.168.0.17:4200",
     "http://192.168.0.94:4200",
+    "http://4.156.80.251",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
