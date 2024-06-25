@@ -26,15 +26,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: username/repository:latest
+          tags: azizkale/erb:latest
 
       - name: Set up K8s
         uses: azure/setup-kubectl@v1
         with:
           version: "latest"
 
+      - name: Decode KUBE_CONFIG_DATA and write to file
+        run: echo ${{ secrets.KUBE_CONFIG_DATA }} | base64 --decode > $HOME/.kube/config
+
       - name: Deploy to Kubernetes
-        run: |
-          kubectl set image deployment/<deployment-name> <container-name>=username/repository:latest --record
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        run: kubectl set image deployment/easyreadbackend-deployment easyreadbackend=azizkale/erb:latest --record
