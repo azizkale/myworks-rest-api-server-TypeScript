@@ -34,7 +34,9 @@ jobs:
           version: "latest"
 
       - name: Decode KUBE_CONFIG_DATA and write to file
-        run: echo ${{ secrets.KUBE_CONFIG_DATA }} | base64 --decode > $HOME/.kube/config
+        run: |
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
-        run: kubectl set image deployment/easyreadbackend-deployment easyreadbackend=azizkale/erb:latest --record
+        run: |
+          kubectl set image deployment/easyreadbackend-deployment easyreadbackend=azizkale/erb:latest --record
