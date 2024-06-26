@@ -76,9 +76,9 @@ app.post("/refresh-token", async (req, res) => {});
 app.get("/", async (req, res, next) => {
   try {
     firebaseApp;
-    // firebaseApp2;
+    firebaseApp2;
     firebaseAdminAppInitializer;
-    // firebaseAdminAppInitializer2;
+    firebaseAdminAppInitializer2;
     //await initializeApp.auth(); //user not necessary, just to initialize firebase admin SDK
     // const auth = getAuth(firebaseApp); // to initilize firebase client SDK
     res.status(200).send("Operations completed successfully.");
