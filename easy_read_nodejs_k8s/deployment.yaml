@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easyreadbackend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: easyreadbackend
+  template:
+    metadata:
+      labels:
+        app: easyreadbackend
+    spec:
+      containers:
+        - name: easyreadbackend
+          image: docker.io/azizkale/erb:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: easyread-backend-secret
+          ports:
+            - containerPort: 3001
+      imagePullSecrets:
+        - name: dockerregistrykey
