@@ -1,35 +1,37 @@
-# STAGE 1: Build
-FROM node:16.13.0-alpine AS build
-WORKDIR /usr/src/app
+# Builder stage
+FROM node:14-alpine AS builder
 
-# Install dependencies
+WORKDIR /app
+
+# Copy only package files and install dependencies
 COPY package.json package-lock.json ./
+
+# Create a directory for tools and copy the applicationDefault.json
+RUN mkdir -p ./dist/tools/
+
 RUN npm install
 
-# Install TypeScript globally
-RUN npm install -g typescript
-
-# Copy the rest of the application code
+# Copy the entire project and build
 COPY . .
 
-# Build the application
 RUN npm run build
 
-# STAGE 2: Serve
-FROM node:16.13.0-alpine
-WORKDIR /usr/src/app
+# Server stage
+FROM node:14-alpine AS server
 
-# Copy built files from the build stage
-COPY --from=build /usr/src/app/dist /usr/src/app/dist
+WORKDIR /app
 
-# Copy node_modules from the build stage
-COPY --from=build /usr/src/app/node_modules /usr/src/app/node_modules
+# Copy the package files again for installing production dependencies
+COPY package.json package-lock.json ./
 
-# Copy any other necessary files (e.g., package.json)
-COPY package.json ./
+# Install only production dependencies
+RUN npm install --only=production
 
-# Expose port 3001
+# Copy the build output from the builder stage
+COPY --from=builder /app/dist /app/dist
+
+# Expose the port the app runs on
 EXPOSE 3001
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
