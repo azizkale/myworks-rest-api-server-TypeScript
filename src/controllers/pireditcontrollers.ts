@@ -162,10 +162,10 @@ export class PirEditController {
     // })
   };
 
-  retrieveAllWordPairsOfSinglePir = async (req: Request, res: Response) => {
-    const pirId = req.query.pirId;
+  retrieveAllWordPairsOfTheChapter = async (req: Request, res: Response) => {
+    const { pirId, chapterId } = req.query;
     this.wordPairService
-      .retrieveAllWordPairsOfSinglePir(pirId)
+      .retrieveAllWordPairsOfTheChapter(pirId, chapterId)
       .then((data: any) => {
         res.status(200).send(data);
       })

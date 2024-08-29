@@ -8,7 +8,6 @@ COPY package.json package-lock.json ./
 
 # Create a directory for tools and copy the applicationDefault.json
 RUN mkdir -p ./dist/tools/
-COPY src/tools/applicationDefault.json ./dist/tools/
 
 RUN npm install
 
@@ -21,17 +20,17 @@ RUN npm run build
 FROM node:14-alpine AS server
 
 WORKDIR /app
+
+# Copy the package files again for installing production dependencies
 COPY package.json package-lock.json ./
-
-
-# Copy the environment file
-# COPY .env .env
 
 # Install only production dependencies
 RUN npm install --only=production
+
+# Copy the build output from the builder stage
 COPY --from=builder /app/dist /app/dist
 
-COPY . .
+# Expose the port the app runs on
 EXPOSE 3001
 
 # Start the application

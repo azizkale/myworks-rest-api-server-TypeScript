@@ -10,6 +10,7 @@ const tokenControl = async (
   try {
     const idToken: any =
       (await req.body.token) || req.headers["authorization"].split(" ")[1];
+
     admin
       .auth()
       .verifyIdToken(idToken, checkRevoked)
@@ -18,6 +19,12 @@ const tokenControl = async (
         next();
       })
       .catch((err: any) => {
+        // Token expired or invalid
+        if (err.code === "auth/id-token-expired") {
+          return res
+            .status(401)
+            .json({ message: "Token expired", code: "token-expired" });
+        }
         return res.status(401).send(err.message);
       });
   } catch (error: any) {

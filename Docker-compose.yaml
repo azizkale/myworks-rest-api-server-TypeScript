@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  erb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: azizkale/erb # Bu kısmı eklerseniz, Dockerfile'daki imaj adı buraya eşleşir
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      - p1_apiKey=${p1_apiKey}
+      - p1_authDomain=${p1_authDomain}
+      - p1_databaseUrl=${p1_databaseUrl}
+      - p1_projectId=${p1_projectId}
+      - p1_storageBucket=${p1_storageBucket}
+      - p1_messagingSenderId=${p1_messagingSenderId}
+      - p1_appId=${p1_appId}
+      - p1_project_id=${p1_project_id}
+      - p1_private_key_id=${p1_private_key_id}
+      - p1_client_email=${p1_client_email}
+      - p1_client_id=${p1_client_id}
+      - p1_auth_uri=${p1_auth_uri}
+      - p1_auth_provider_x509_cert_url=${p1_auth_provider_x509_cert_url}
+      - p1_client_x509_cert_url=${p1_client_x509_cert_url}
+      - p1_private_key=${p1_private_key}
+      - p2_apiKey=${p2_apiKey}
+      - p2_authDomain=${p2_authDomain}
+      - p2_databaseUrl=${p2_databaseUrl}
+      - p2_projectId=${p2_projectId}
+      - p2_storageBucket=${p2_storageBucket}
+      - p2_messagingSenderId=${p2_messagingSenderId}
+      - p2_appId=${p2_appId}
+      - p2_project_id=${p2_project_id}
+      - p2_private_key_id=${p2_private_key_id}
+      - p2_client_email=${p2_client_email}
+      - p2_client_id=${p2_client_id}
+      - p2_auth_uri=${p2_auth_uri}
+      - p2_auth_provider_x509_cert_url=${p2_auth_provider_x509_cert_url}
+      - p2_client_x509_cert_url=${p2_client_x509_cert_url}
+      - p2_private_key=${p2_private_key}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}

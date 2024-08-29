@@ -4,6 +4,7 @@ import { Pir } from "../models/Pir";
 import { Group } from "../models/Group";
 import { Chapter } from "../models/Chapter";
 import { GroupService } from "./groupservice";
+import { CRUD } from "../tools/CRUD";
 
 const db = getDatabase();
 
@@ -152,6 +153,7 @@ export class PirService {
       "pirs/" + chapter.pirId + "/chapters/" + chapter.chapterId
     );
     delete chapter.selectEditor; // removes selectEditor (no need)
+
     return ref
       .update(chapter)
       .then(() => {

@@ -12,6 +12,7 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 router.post("/signin", signin.signin);
+router.post("/refreshToken", signin.getRefreshToken);
 router.post("/users/createuser", userController.createUser);
 router.get("/users/getUserById", userController.getUserById);
 router.get("/users/retrieveallusers", userController.retrieveAllUsers);
