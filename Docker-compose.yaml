@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: azizkale/erb # Bu kısmı eklerseniz, Dockerfile'daki imaj adı buraya eşleşir
+    image: azizkale/erb
     ports:
       - "3001:3001"
     env_file:

@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:14-alpine'
+        }
+    }
 
     stages {
         stage('Install dependencies') {
@@ -23,10 +27,10 @@ pipeline {
                 }
             }
         }
-        stage('Start') {
+        stage('Deploy with Docker') {
             steps {
                 script {
-                    sh 'npm run start'
+                    sh './run.sh'
                 }
             }
         }
