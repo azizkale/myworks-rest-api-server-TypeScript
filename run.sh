@@ -2,10 +2,6 @@
 
 echo "Starting the build and deployment process..."
 
-# from TypeScript to JavaScript
-npm install || { echo 'npm install failed' ; exit 1; }
-npm run build || { echo 'npm run build failed' ; exit 1; }
-
 docker build -t easyreadrestful . || true
 docker stop easyreadrestful_con || true
 docker rm easyreadrestful_con || true
