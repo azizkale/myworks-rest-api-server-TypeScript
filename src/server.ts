@@ -67,6 +67,7 @@ app.get("/hi", async (req, res, next) => {
   // getMultipleWordPairs()
   //   .then((data) => res.json(data))
   //   .catch((err) => console.error(err));
+  //
 });
 
 app.post("/refresh-token", async (req, res) => {});
