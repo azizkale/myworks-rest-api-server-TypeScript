@@ -78,7 +78,7 @@ app.get("/", async (req, res, next) => {
     firebaseApp2;
     firebaseAdminAppInitializer;
     firebaseAdminAppInitializer2;
-    //await initializeApp.auth(); //user not necessary, just to initialize firebase admin SDK.
+    //await initializeApp.auth(); //user not necessary, just to initialize firebase admin SDK
     // const auth = getAuth(firebaseApp); // to initilize firebase client SDK
     res.status(200).send("Operations completed successfully.");
   } catch (error: any) {
