@@ -5,12 +5,7 @@ pipeline {
         }
     }
 
-    stages {
-        stage('Clean Workspace') {
-            steps {
-                deleteDir() 
-            }
-        }
+    stages {      
         stage('Install dependencies') {
             steps {
                 script {
@@ -33,7 +28,7 @@ pipeline {
         }
         stage('Deploy with Docker') {
             steps {
-                sh './run.sh'
+                sh 'run.sh'
             }
         }
     }
