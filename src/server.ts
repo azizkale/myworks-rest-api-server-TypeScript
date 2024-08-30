@@ -31,7 +31,7 @@ const corsOptions = {
     "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
     "https://mywebsite-3f527.web.app",
-    "https://cicd.emm-itech.de/",
+    "http://4.156.80.52",
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
