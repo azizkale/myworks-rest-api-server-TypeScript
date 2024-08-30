@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Deploy with Docker') {
             steps {
-                sh 'run.sh'
+                sh './run.sh'
             }
         }
     }
