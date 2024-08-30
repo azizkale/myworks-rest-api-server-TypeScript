@@ -40,4 +40,4 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl set image deployment/easyreadbackend-deployment easyreadbackend=azizkale/erb:latest --namespace ea-project
+          kubectl set image deployment/easyreadbackend-deployment easyreadbackend=azizkale/erb:latest --namespace easyread
