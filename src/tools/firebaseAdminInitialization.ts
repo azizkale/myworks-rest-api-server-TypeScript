@@ -21,36 +21,7 @@ admin.initializeApp({
   databaseURL: process.env.p1_databaseURL,
 });
 
-const application2: any = {
-  type: type,
-  project_id: process.env.p2_project_id,
-  private_key_id: process.env.p2_private_key_id,
-  private_key:
-    "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDPHQuQ+sbqc5Pf\npN8a6c0MHFoPlMSbvbRx6UYtGlnGaApdZN2p7DosTLxB1/bEADXcU7+6xNBTw+Sb\n+DsmuG0oQqMSegGC8JSUDClB5BXlFRtJOzLAb26OJLbiX/RbOXaBhCDgyTjZtsRs\nDHeGe+Kdm8JEuIsAejBUQYsKvBmsKKjXFzpuXLaSW3dVZnqif7rGOClsXDBqb7q5\nppCW+98oRddujJ734T5TzkrqGxYKIzrJsLtJ9zbfOhHj1Z43YvKa6RKe1bVLgHjR\n7kclbyq+bMrarWsvDCqf+3r1DoydVJD80fTxQslPt/L8yb1VAIf5I+W7/oahbndE\nXUCRQ8hjAgMBAAECggEAATuFBBnZ8S865AvRIBHgHIBWsN0Lxnl8h2kB9+a+PgYE\necXN4+L5/aV/QU0NtODjcSo2a+Ab9UOnKp5xi6txStoKqmN7etH/sFnaLQA0eSaF\nAQyPIsIHAGWLiRFVHO3cnKyynWPVKMaDqLjyRSSblqCEqXAHs7sGapnxP+EargGV\nMdeiL1FbkdNlNT9jnEnKUNFtD9cbNxNNh9Mm7YCTPN2UwuCle3SozJ8UEZUB/sDR\na3KMsce0PzKDX0D4cgvmD9MwioO7zWjheeIOxanW5j6Nrb37IAsUWuYih6CcjOGF\nnppEl/5ARna745W8HHtUZ379nkUnavQVTI3e9kL7wQKBgQDr9r/1lgkQZdKgGE86\ntz73/Rv5Mr6CaiprI/sLcPe9sn/2uvWMgFm69w5LtC3UspqPYMmSCh61sJeFR6rS\nd3BbiDA8lJw7rcQohBARZQoGVrh+UpCjk443QXRShVjEatkNEveL1DKAjKt6c9KI\npRZGm6P250jfxXjvS/byF17k0QKBgQDgsylNaQmMdBsytsqK9iYbqHWJ+n16roku\nBh/d/aUfM5gsi0gRFkmkp6k52qKzttYDMcjfg9nMu+uxhZ/VlbYhGccJbyGi4D2z\nk8Dl2kADh5I3VSLGR1ZN985s2+zNyBi5qEk3DhFrvSKOpMgkyonWfBd9Gcg8c0LS\nYfhY5ES28wKBgHgj8ijAc2z96vfIaM6kblMldBC1XXpZQ6+5aiCxK/JR6AVfu5YF\n46nmEElLO+qH5VoLFZZdwLURbJRXoQn39iUkeireH43jM3TNiMDSiQAhN15Z+3rN\nriNEGE3Lxx56qHiXp6JyMCRzevul7RPVujnJFPqpV9lXWfO84cbxT0eBAoGASFYl\nE8CezFKMdvUVm0rG1dyTiknTn20UyHY8SBDh2XuYn65vEuEj8BfxiKhz/Hr9xqV+\nT0Z5FUniBJJJ9E5wBZPw2X6nS3H5KxiD3vs15Gz+i0WjHkXU6OC/2ZerUkv6ebpN\nZ6XlwdNvjpBJxl5VpXDpduKX7a4FcwkLFELYRDUCgYEApAF27FdWOpXFBJ6UqzjA\nDeKCmBtHOFsf5IkQmATTlA0YsSdF0gl8MtxxJuy/9AQ2r+cIUcH/rss734KUNi5o\nr1rTGrLK4/dRndIswb3p1svqrHfWpMN+U6thrOND/xjofuyLzgnWivyaBDOp4Zek\neS8Yj95sQImWQ+UQQ/y/0pg=\n-----END PRIVATE KEY-----\n",
-  client_email: process.env.p2_client_email,
-  client_id: process.env.p2_client_id,
-  auth_uri: process.env.p2_auth_uri,
-  token_uri: process.env.p2_token_uri,
-  auth_provider_x509_cert_url: process.env.p2_auth_provider_x509_cert_url,
-  client_x509_cert_url: process.env.p2_client_x509_cert_url,
-};
-
-admin.initializeApp(
-  {
-    credential: admin.credential.cert(application2),
-    databaseURL: process.env.p2_databaseURL,
-  },
-  "application2"
-);
-
 const firebaseAdminAppInitializer = admin.auth();
-const firebaseAdminAppInitializer2 = admin.auth(admin.app("application2"));
 const db_pir = admin.database();
-const db_de = admin.database(admin.app("application2"));
 
-export {
-  firebaseAdminAppInitializer,
-  firebaseAdminAppInitializer2,
-  db_de,
-  db_pir,
-};
+export { firebaseAdminAppInitializer, db_pir };
