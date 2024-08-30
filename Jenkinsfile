@@ -21,11 +21,14 @@ pipeline {
             }
         }
 
+        stage('Set Executable Permission') {
+            steps {
+                sh 'chmod +x run.sh'
+            }
+        }
         stage('Deploy with Docker') {
             steps {
-                script {
-                    sh './run.sh'
-                }
+                sh './run.sh'
             }
         }
     }
