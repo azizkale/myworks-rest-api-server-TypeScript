@@ -18,7 +18,7 @@ const applicationDefault: any = {
 
 admin.initializeApp({
   credential: admin.credential.cert(applicationDefault),
-  databaseURL: process.env.p1_databaseURL,
+  databaseURL: "https://mywebsite-3f527-default-rtdb.firebaseio.com",
 });
 
 const application2: any = {
@@ -38,7 +38,8 @@ const application2: any = {
 admin.initializeApp(
   {
     credential: admin.credential.cert(application2),
-    databaseURL: process.env.p2_databaseURL,
+    databaseURL:
+      "https://easy-read-text-default-rtdb.europe-west1.firebasedatabase.app",
   },
   "application2"
 );
