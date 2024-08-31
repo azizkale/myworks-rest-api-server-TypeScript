@@ -4,10 +4,15 @@ metadata:
   name: easyreadbackend-deployment
   namespace: easyread
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: easyreadbackend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:
